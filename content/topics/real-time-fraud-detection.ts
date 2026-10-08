@@ -18,7 +18,7 @@ export const topic: Topic = {
         "That shapes everything. There is no time to dig through years of history or wait on slow services while the shopper stands at the till. All the heavy counting must already be done before the swipe arrives, so at decision time we only look up answers that are ready and waiting.",
         "If the check runs out of time, the payment still needs an answer. So the system has a backup plan, such as using simple rules only, or a policy chosen in advance, like approving small amounts and declining risky ones. The trade-off is that the backup is less accurate, so it should be rare.",
       ],
-      diagrams: ["fraud-time-budget"],
+      figure: "stopwatch",
       remember: "The fraud check gets tens of milliseconds, so the slow work must be done before the swipe arrives.",
     },
     {
@@ -42,7 +42,7 @@ export const topic: Topic = {
         "Flink keeps these running counts in memory for each card, called keyed state. Every so often it saves a snapshot, called a checkpoint. If a computer crashes, Flink loads the last snapshot and replays the events since then from Kafka, so each swipe affects the counts exactly once, never lost and never doubled.",
         "Swipes do not always arrive in order. A shop's machine might lose its connection and send a swipe late. Flink uses event time, the time written on the swipe itself, not the time it arrived. It also uses a watermark, a marker that says, I do not expect anything older than this anymore. A window is closed only after the watermark passes its end. The trade-off: waiting longer catches more late swipes, but the counts arrive a little later.",
       ],
-      diagrams: ["fraud-sliding-windows"],
+      figure: "window-frame",
       remember: "Sliding windows give fresh, overlapping counts per card, and checkpoints plus watermarks keep those counts correct.",
     },
     {
@@ -55,7 +55,7 @@ export const topic: Topic = {
         "The offline store is the big diary in the back room. It keeps the full history of every clue over time, which is what we need to train new models. It is large and cheap, but far too slow to use during a swipe.",
         "Both stores must use the same clue recipes. If training counted swipes one way and the live system counted them another way, the model would practice one game and then be asked to play a different one. This mismatch is called training-serving skew. Training data must also be point-in-time correct: for each past swipe, we use the clues exactly as they were at that moment, never peeking at what happened later. Otherwise the model looks smarter in tests than it really is.",
       ],
-      diagrams: ["fraud-pipeline"],
+      figure: "register-drawer",
       remember: "Fresh clues live in the fast online store, history lives in the offline store, and both come from the same recipes.",
     },
     {

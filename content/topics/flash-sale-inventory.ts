@@ -31,7 +31,7 @@ export const topic: Topic = {
         "Rate shedding means politely turning away work you cannot serve, early, right at the front door. If the line is already far longer than the toys could ever cover, the people at the back can be told straight away that the toys will very likely be gone. Once every toy is reserved, the door switches to a friendly sold out page, so nobody waits for nothing. Saying no early is kinder and cheaper than letting people pile up, wait a minute, and then fail.",
         "We also stop unfair grabbing: one golden toy per account, and checks that block bots, which are computer programs that click much faster than any person. The trade-off is that some real shoppers wait or are turned away, and the waiting room becomes one more piece that must work perfectly on the big day.",
       ],
-      diagrams: ["flash-funnel"],
+      figure: "rope-line",
       remember: "Hand out the page from copies, let buyers in at a safe speed, and turn away what you cannot serve as early as possible.",
     },
     {
@@ -44,7 +44,7 @@ export const topic: Topic = {
         "The fix is to make check and take one single step that cannot be split in half. This is called an atomic operation, from an old word meaning cannot be cut. The counter handles one take at a time: if at least one toy is left, take it and say yes, all in one go. Otherwise say no. Ann gets yes, Ben gets sold out, and the count can never drop below zero.",
         "Real tools give us this single step. A fast in-memory store such as Redis runs commands one at a time, so a tiny script that checks the count and subtracts one runs without anyone sneaking in between. A database can do it too, with one command that says: subtract one from the stock, but only if the stock is above zero, and tell me whether it worked. The thing to avoid is ever reading the number in one step and writing it back in another.",
       ],
-      diagrams: ["flash-race"],
+      figure: "last-cookie",
       remember: "Never read the stock and then write it in two steps. Check and take in one step.",
     },
     {
@@ -56,7 +56,7 @@ export const topic: Topic = {
         "There is a catch. Bucket 3 might run empty while bucket 7 still has toys. Telling a kid sold out just because their bucket was empty would be wrong. So a request that lands on an empty bucket tries another one, and near the end the last few toys can be moved between buckets (rebalanced). The shop only says sold out when every bucket is empty. This adds some extra work and complexity in exchange for spreading the load.",
         "Pre-allocation also means getting everything else ready early: starting extra servers well before 10:00 (pre-scaling), and loading the toy page and other common answers into caches, the quick-grab memory spots, ahead of time (pre-warming), so nothing starts cold just as the crowd arrives.",
       ],
-      diagrams: ["flash-buckets"],
+      figure: "ten-bowls",
       remember: "Load the stock into fast memory before the sale, and split it so the crowd spreads out.",
     },
     {
@@ -69,7 +69,7 @@ export const topic: Topic = {
         "Kids double click, and phones lose signal and send the same thing again. So each buy request carries an idempotency key, a unique ticket number for that one purchase attempt. If the same ticket number arrives twice, the shop replies with the answer it already gave, instead of holding a second toy.",
         "Two edges need clear rules. A payment can arrive just after the timer ran out, so the shop either holds a toy again if one is left, or refunds the money. And the timer length is a trade-off: too long and toys sit unsold while held, too short and slower payers lose their toy.",
       ],
-      diagrams: ["flash-hold"],
+      figure: "hold-shelf",
       remember: "A yes is a hold with a timer. Unpaid holds expire and the toy goes back on the shelf.",
     },
     {
@@ -81,7 +81,7 @@ export const topic: Topic = {
         "So after a successful hold, the shop drops a note into a queue, a line of messages that are kept safely even if a computer restarts. A worker takes notes from the queue at a steady pace and writes the orders into the database. The database does its own final check as well, subtracting stock only if some is left, so even if the fast counter hiccups, the true count never goes below zero.",
         "After the sale we reconcile, which means comparing the books. Toys sold, plus toys still held, plus toys left must add up to 100. If the fast counters and the database disagree, the database wins and the rest is fixed. Very rarely, a shopper who got a yes from the fast counter may need an apology and a refund. Good shops design to keep that close to zero, and they plan what to say if it happens.",
       ],
-      diagrams: ["flash-architecture"],
+      figure: "big-book",
       remember: "Fast counters for speed, a queue for safety, and the database as the final word.",
     },
   ],

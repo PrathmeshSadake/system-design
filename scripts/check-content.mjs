@@ -4,7 +4,7 @@ import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 
 const root = new URL("..", import.meta.url).pathname;
-const dirs = ["content/topics", "components", "components/diagrams", "app", "app/topics/[slug]", "lib"];
+const dirs = ["content/topics", "components", "components/figures", "hairline/figures", "app", "app/topics/[slug]", "lib"];
 const rules = [
   { name: "em dash", re: /—/ },
   { name: "en dash", re: /–/ },

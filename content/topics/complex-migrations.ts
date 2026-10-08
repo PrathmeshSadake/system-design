@@ -18,7 +18,7 @@ export const topic: Topic = {
         "We repeat this, one feature at a time, until the old system gets no requests at all. Then we switch it off. If a new feature misbehaves, the monitor simply points that one feature back to the old room. So every move is small, and every move can be undone.",
         "The price is that for months we run two systems side by side, and both often need the same information. If a kid changes their name in the new system, the old one may need to hear about it too, so the two copies of the data must be kept in step. That syncing is often the hardest part of the whole job.",
       ],
-      diagrams: ["migr-strangler"],
+      figure: "fig-vine",
       remember: "Put a router in front, move one feature at a time, and retire the old system only when nothing uses it.",
     },
     {
@@ -36,7 +36,7 @@ export const topic: Topic = {
         "Never change what an existing field means. If price means dollars, do not start storing cents in it, or the old app will read 1999 cents as 1,999 dollars. Add a new field, such as price_cents, instead.",
         "Readers should skip fields they do not recognize instead of crashing. Then the new app can add fields without breaking the old one.",
       ],
-      diagrams: ["migr-mixed-versions"],
+      figure: "two-keys",
       remember: "During a rollout, old and new versions run together, so every change must make sense to both.",
     },
     {
@@ -57,7 +57,7 @@ export const topic: Topic = {
         "5. Stop writing price, since nothing reads it anymore.",
         "6. Remove price for good.",
       ],
-      diagrams: ["migr-expand-contract"],
+      figure: "two-tags",
       remember: "Expand first, move everything over, and contract last, one safe release at a time.",
     },
     {
@@ -70,7 +70,7 @@ export const topic: Topic = {
         "There are costs. You need two full playrooms, so you pay for about double the computers, at least while you switch. The new room starts cold, with nothing remembered yet, so teams often warm it up with test traffic first. If the switch is done by changing the internet's address book (DNS), some phones remember the old address for a while, so a router switch is quicker and cleaner.",
         "Most importantly, both rooms usually share one database, the one big toy box. So the data changes must work for blue and green at the same time, which is exactly what expand and contract gives us.",
       ],
-      diagrams: ["migr-blue-green"],
+      figure: "two-playrooms",
       remember: "Get the idle copy ready, switch everyone at once, and switch back if anything looks wrong.",
     },
     {
@@ -82,7 +82,7 @@ export const topic: Topic = {
         "Instead of sending everyone to the new version, we send a small slice, maybe 1 in every 100 people. Then we compare: does the new version make more mistakes (errors) or answer more slowly (latency) than the old one, for the same kind of visitors at the same time? If it is just as good, we widen the slice to 5 percent, then 25, then everyone. If it is worse at any step, an automatic checker sends everyone back to the old version.",
         "The good part is that a bug only reaches a few people, and only briefly. The costs are that a rollout takes longer, both versions run together for a while (so the data rules from earlier still apply), and you need good measurements. With a tiny slice and few visitors, there may not be enough results yet to tell whether the new version is really worse, so teams wait long enough at each step to be sure.",
       ],
-      diagrams: ["migr-canary-split", "migr-canary-ramp"],
+      figure: "canary-seats",
       remember: "Start small, compare against the old version, and widen only while it stays healthy.",
     },
     {

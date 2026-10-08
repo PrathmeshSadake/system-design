@@ -1,100 +1,553 @@
 @import "tailwindcss";
 
+/*
+ * Black and white, in the manner of Hairline: a white canvas, chroma-free greys,
+ * Geist for words, Geist Mono for small labels, and Instrument Serif italic only
+ * for the one soft phrase that says an idea in kid words.
+ */
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --color-paper: #fbfaf7;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --color-canvas: #fff;
+  --color-stone: #f4f4f4;
+  --color-ink: #0a0a0a;
+  --color-body: #262626;
+  --color-muted: #737373;
+  --color-faint: #a3a3a3;
+  --color-line: rgba(0, 0, 0, 0.07);
 }
 
 :root {
-  color-scheme: light;
+  --topbar: 54px;
+  --gutter: clamp(18px, 5vw, 28px);
+  --card: 0 0 0 1px #0000000f, 0 1px 2px -1px #0000000f, 0 2px 4px 0 #0000000a;
+  --lift: 0 1px 2px #00000008, 0 10px 28px -16px #00000024;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* Hairline figures sit on white plates */
+  --hairline-plate: #fff;
 }
 
 html {
-  scroll-behavior: smooth;
+  color-scheme: light;
 }
-
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
 body {
-  background: var(--color-paper);
-  color: #1e293b;
-  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  color: var(--color-ink);
+  background: var(--color-canvas);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-
-/* Section headings leave room for the sticky header when jumped to. */
-[id] {
-  scroll-margin-top: 6rem;
+em {
+  font-style: italic;
 }
-
+::selection {
+  background: #0a0a0a;
+  color: #fff;
+}
 :focus-visible {
-  outline: 3px solid #0369a1;
+  outline: 1.5px solid var(--color-ink);
   outline-offset: 3px;
   border-radius: 6px;
 }
-
-/* Diagram animations */
-.diagram svg text {
-  font-family: inherit;
+[id] {
+  scroll-margin-top: calc(var(--topbar) + 28px);
 }
 
-.diagram .grow {
-  transform-box: fill-box;
-  transform-origin: left center;
-  animation: grow 1.2s ease-out both;
+/* The top bar: the name on the left, two quiet links on the right, glass behind. */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar);
+  padding: 0 max(var(--gutter), calc((100% - 1080px) / 2 + var(--gutter)));
+  background: color-mix(in srgb, var(--color-canvas) 82%, transparent);
+  backdrop-filter: blur(12px);
 }
-
-@keyframes grow {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
+.topbar-name {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
-
-.diagram .pulse {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: pulse 2s ease-out infinite;
+.topbar-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-muted);
 }
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.6);
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(1.6);
-    opacity: 0;
-  }
+.topbar nav {
+  display: flex;
+  margin-right: -10px;
 }
-
-.diagram .blink {
-  animation: blink 2.4s ease-in-out infinite;
+.topbar-link {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--color-muted);
+  transition: color 150ms ease;
 }
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.25;
+@media (hover: hover) {
+  .topbar-link:hover {
+    color: var(--color-ink);
   }
 }
-
-.diagram-scroll {
-  scrollbar-width: thin;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .diagram .motion {
+@media (max-width: 420px) {
+  .topbar-sub {
     display: none;
   }
-  .diagram .grow,
-  .diagram .blink {
-    animation: none;
+}
+
+/* Buttons: one black, one white, both soft. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--color-stone), var(--lift);
+  transition: transform 160ms var(--ease-out);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn-primary {
+  background: var(--color-ink);
+  color: #fff;
+  box-shadow: var(--lift);
+}
+
+.mono-label {
+  font: 400 11.5px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.kid {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Home */
+.hero-title {
+  max-width: 15ch;
+  font-size: clamp(36px, 6.4vw, 56px);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.hero-title em {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.08em;
+  letter-spacing: -0.01em;
+}
+.hero-sub {
+  max-width: 34rem;
+  margin-top: 20px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+.hero-art {
+  width: min(560px, 100%);
+  margin-top: 28px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rise > * {
+    animation: rise 700ms var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
   }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* A list of lessons: rows on hairlines, not cards. */
+.lesson-list {
+  border-top: 1px solid var(--color-line);
+}
+.lesson-row {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 4px 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+@media (min-width: 760px) {
+  .lesson-row {
+    grid-template-columns: 3rem minmax(0, 15rem) minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+.lesson-num {
+  padding-top: 3px;
+  font: 400 12px/1.4 var(--font-mono);
+  color: var(--color-faint);
+  font-variant-numeric: tabular-nums;
+}
+.lesson-title {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+}
+.lesson-short {
+  grid-column: 2;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+@media (min-width: 760px) {
+  .lesson-short {
+    grid-column: 3;
+  }
+}
+.lesson-row .lesson-title {
+  transition: color 150ms ease;
+}
+@media (hover: hover) {
+  .lesson-row:hover .lesson-title {
+    text-decoration: underline;
+    text-decoration-color: var(--color-faint);
+    text-underline-offset: 4px;
+  }
+}
+
+/* A lesson page: a rail of its parts from 1100px, one 640px column of reading. */
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px var(--gutter) 96px;
+}
+.page-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 1100px) {
+  .page-grid {
+    grid-template-columns: 200px minmax(0, 640px);
+    gap: 72px;
+  }
+}
+.col {
+  max-width: 640px;
+  min-width: 0;
+  margin: 0 auto;
+  width: 100%;
+}
+@media (min-width: 1100px) {
+  .col {
+    margin: 0;
+  }
+}
+.rail {
+  display: none;
+}
+@media (min-width: 1100px) {
+  .rail {
+    display: block;
+  }
+}
+.rail-inner {
+  position: sticky;
+  top: calc(var(--topbar) + 40px);
+}
+.rail ol {
+  display: grid;
+  gap: 2px;
+  margin-top: 14px;
+}
+.rail a {
+  display: block;
+  padding: 4px 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-muted);
+  transition: color 150ms ease;
+}
+@media (hover: hover) {
+  .rail a:hover {
+    color: var(--color-ink);
+  }
+}
+.rail a[aria-current="true"] {
+  color: var(--color-ink);
+}
+
+.lede {
+  margin-top: 18px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+.page-h1 {
+  margin-top: 12px;
+  font-size: clamp(30px, 4.6vw, 40px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.part {
+  padding-top: 64px;
+}
+.part-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.part-num {
+  font: 400 12px/1 var(--font-mono);
+  color: var(--color-faint);
+  font-variant-numeric: tabular-nums;
+}
+.part-h2 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.part-kid {
+  margin-top: 4px;
+  font-size: 21px;
+  line-height: 1.35;
+  color: var(--color-muted);
+}
+.prose {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--color-body);
+  text-wrap: pretty;
+}
+.prose ul,
+.prose ol {
+  display: grid;
+  gap: 8px;
+  padding-left: 1.2em;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li::marker {
+  color: var(--color-faint);
+}
+.remember {
+  margin-top: 22px;
+  padding: 2px 0 2px 16px;
+  border-left: 1px solid var(--color-ink);
+}
+.remember p:last-child {
+  margin-top: 6px;
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+
+/* A figure: a white plate drawn by its shadow, the name and the read-out in its corners. */
+.figure {
+  margin: 30px 0 4px;
+}
+.figure-plate {
+  position: relative;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--card);
+  overflow: hidden;
+}
+.figure-stage {
+  display: block;
+  aspect-ratio: 5 / 4;
+  touch-action: pan-y;
+}
+.figure-stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.figure-tag {
+  position: absolute;
+  top: 14px;
+  z-index: 1;
+  font: 400 11px/1 var(--font-mono);
+  letter-spacing: 0.02em;
+  color: var(--color-faint);
+  pointer-events: none;
+}
+.figure-tag:first-child {
+  left: 16px;
+}
+.figure-read {
+  right: 16px;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+.figure-play {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1;
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 8px;
+  font: 400 11px/1 var(--font-mono);
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--color-stone);
+  transition: color 150ms ease, transform 160ms var(--ease-out);
+}
+.figure-play:disabled {
+  opacity: 0;
+}
+.figure-play[aria-pressed="true"] {
+  background: var(--color-ink);
+  color: #fff;
+  box-shadow: none;
+}
+@media (hover: hover) {
+  .figure-play:not(:disabled):hover {
+    color: var(--color-ink);
+  }
+}
+.figure-play:active {
+  transform: scale(0.96);
+}
+.figure-caption {
+  max-width: 60ch;
+  margin-top: 12px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+.hero-art .figure {
+  margin: 0;
+}
+.hero-art .figure-plate {
+  box-shadow: none;
+}
+
+/* The end of a lesson */
+.end {
+  margin-top: 80px;
+  padding-top: 28px;
+  border-top: 1px solid var(--color-line);
+}
+.recap {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding-left: 1.3em;
+  list-style: decimal;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--color-body);
+}
+.recap li::marker {
+  font: 400 12px var(--font-mono);
+  color: var(--color-faint);
+}
+.words {
+  margin-top: 16px;
+}
+.words > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px 24px;
+  padding: 14px 0;
+  border-top: 1px solid var(--color-line);
+}
+@media (min-width: 640px) {
+  .words > div {
+    grid-template-columns: 11rem minmax(0, 1fr);
+  }
+}
+.words dt {
+  font-size: 14.5px;
+  font-weight: 500;
+}
+.words dd {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.pager {
+  display: grid;
+  gap: 24px;
+  margin-top: 72px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-line);
+}
+@media (min-width: 640px) {
+  .pager {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.pager a {
+  display: grid;
+  gap: 8px;
+}
+.pager a:last-child:not(:first-child) {
+  text-align: right;
+}
+.pager span:last-child {
+  font-size: 15px;
+  font-weight: 500;
+}
+@media (hover: hover) {
+  .pager a:hover span:last-child {
+    text-decoration: underline;
+    text-decoration-color: var(--color-faint);
+    text-underline-offset: 4px;
+  }
+}
+
+.footer {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px var(--gutter) 48px;
+  border-top: 1px solid var(--color-line);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+.footer a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-faint);
+  text-underline-offset: 4px;
 }

@@ -18,7 +18,7 @@ export const topic: Topic = {
         "The shape is strict. You decide the columns up front (the schema), and the database refuses data that does not fit, like a lunch order for a kid who does not exist. Changes happen in transactions that are all or nothing: if you move a book from one shelf to another, it is never lost halfway. These promises are called ACID: all or nothing, the rules always hold, people working at the same time do not trip over each other, and saved means saved, even after a crash.",
         "Relational databases like PostgreSQL and MySQL are a great fit when data is connected and correctness matters, like money, orders and grades. The trade-off is that one main machine usually takes all the writes. You can add copies that help with reading, but splitting the data across many machines is hard work.",
       ],
-      diagrams: ["datastore-tables"],
+      figure: "card-catalog",
       remember: "Relational databases are strict, linked tables with all or nothing changes, great when correctness matters.",
     },
     {
@@ -37,7 +37,7 @@ export const topic: Topic = {
         "Wide-column store: a giant sticker book. Each page has a key and can hold its own set of stickers (columns), kept in sorted order. Built to swallow huge numbers of writes across many machines. Examples: Cassandra, HBase.",
         "Graph database: kids joined by friendship strings. Great for questions like who are my friends' friends. Example: Neo4j.",
       ],
-      diagrams: ["datastore-nosql"],
+      figure: "locker-bank",
       remember: "NoSQL comes in four shapes, lockers, folders, sticker books and friendship strings, trading joins and strict rules for scale and flexibility.",
     },
     {
@@ -61,7 +61,7 @@ export const topic: Topic = {
         "Real B-tree signposts are big. Each one is a page on disk holding hundreds of keys, so the tree stays very short. Even with millions of rows, a lookup usually takes only 3 or 4 hops. Because everything is kept in order, B-trees are great for exact questions (find Pia) and range questions (everyone from F to N, or all orders from last week). Most databases also link the bottom shelves together in order, so a range search can simply walk sideways.",
         "B-trees are the default index in most relational databases. When data changes, the B-tree updates the right page in place, and when a page gets too full, it splits in two. The trade-off is that writes jump around to many different pages on disk, which is slower than just adding to the end of a file.",
       ],
-      diagrams: ["datastore-btree"],
+      figure: "signposts",
       remember: "A B-tree is a short, balanced tree of sorted signposts that finds any key, or any range, in a few hops.",
     },
     {
@@ -74,7 +74,7 @@ export const topic: Topic = {
         "To search for cat AND dog, look up the cat list and the dog list, and keep only the documents found in both. To search for cat OR dog, merge the two lists. Search engines also keep extra notes, like how often and where a word shows up, so they can put the best matches first.",
         "The trade-off: the index can be large, and adding one document touches many word lists. So search tools like Elasticsearch add new documents in small batches and merge them in the background, which means a brand new document may take a moment to show up in search.",
       ],
-      diagrams: ["datastore-inverted"],
+      figure: "word-tabs",
       remember: "An inverted index maps each word to the documents that contain it, so a search is a quick list lookup.",
     },
     {
@@ -87,7 +87,7 @@ export const topic: Topic = {
         "Over time the files pile up, so a background job called compaction merges them into bigger sorted files, keeps only the newest version of each key, and throws away old and deleted ones. A delete is written as a small marker called a tombstone, which hides the old value until compaction removes both.",
         "Reading is the harder part. To find a key, look in the memtable first, then in the files from newest to oldest. To avoid opening every file, each file has a bloom filter, a tiny summary that answers either definitely not here or maybe here. It never says not here when the key really is there. LSM trees power write-heavy databases like Cassandra and RocksDB. The costs are slower reads when many files must be checked (read amplification) and extra disk work as compaction rewrites data again and again (write amplification).",
       ],
-      diagrams: ["datastore-lsm-write", "datastore-lsm-read"],
+      figure: "sorting-mat",
       remember: "LSM trees make writes fast by batching them into sorted files, and pay for it with extra work when reading and merging.",
     },
     {
@@ -106,7 +106,7 @@ export const topic: Topic = {
         "Index the questions you ask often, and drop indexes nobody uses, because each one slows down writes.",
         "Avoid one giant table that does everything. Keep big, rarely needed things, like profile pictures, apart from the small facts you read all the time.",
       ],
-      diagrams: ["datastore-normalize"],
+      figure: "one-fact",
       remember: "Shape data around the questions you ask, store each fact once by default, and copy it only on purpose.",
     },
   ],

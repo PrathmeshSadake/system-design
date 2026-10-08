@@ -18,7 +18,7 @@ export const topic: Topic = {
         "Now the string gets cut. A kid in treehouse B asks for the score. B knows it might be behind, so it has two choices. It can say sorry, I cannot be sure right now, please try later. That keeps every answer correct but does not answer, so it picks consistency. Or it can answer with the score it has. That always answers but might be old, so it picks availability.",
         "Strings do break in real life: cables get cut, switches fail, and computers freeze. So partition tolerance is not really optional. The honest meaning of CAP is: while the string is cut, you must choose between always correct and always answering. While the string works, you can have both.",
       ],
-      diagrams: ["dist-cap-partition"],
+      figure: "treehouses",
       remember: "During a network split, a system must choose: refuse to answer, or answer with data that may be old.",
     },
     {
@@ -30,7 +30,7 @@ export const topic: Topic = {
         "Latency means waiting time. Even when every string works, making sure all treehouses agree takes time, because B has to check with A before it answers. So on a calm day the choice is: answer fast from the nearest copy, which might be a moment behind, or check with the others first, which is always up to date but slower.",
         "Different systems choose differently. Dynamo-style databases such as Cassandra, with their default settings, choose availability during a split and speed on normal days, which is written PA/EL. Google Spanner chooses consistency both times, PC/EC, and pays for it with extra waiting. Many databases let you pick per request how many copies must agree, so you can choose fast for a like counter and careful for a bank balance.",
       ],
-      diagrams: ["dist-pacelc-tree"],
+      figure: "seesaw",
       remember: "Split or not, every system trades being up to date against being fast or always answering.",
     },
     {
@@ -48,7 +48,7 @@ export const topic: Topic = {
         "5 computers: need 3 to agree, can lose 2.",
         "4 computers: need 3 to agree, can still lose only 1. That is why groups usually have an odd size.",
       ],
-      diagrams: ["dist-quorum-overlap"],
+      figure: "five-stones",
       remember: "Any two majorities overlap, so the group can never pick two different answers.",
     },
     {
@@ -61,7 +61,7 @@ export const topic: Topic = {
         "Phase two is accept. Once a majority has promised, the proposer asks them to accept a value with ticket 5. It is not free to choose: if any reply reported an earlier accepted value, it must propose the one with the highest number. Only if nobody reported anything may it use its own idea. When a majority accepts the same proposal, the value is chosen for good, and the learners are told.",
         "That must-reuse rule is what keeps Paxos safe: once a value might have won, every later proposal carries it forward. Paxos is proven correct, but it is famously hard to understand and to build. Two proposers can keep interrupting each other with bigger numbers, so real systems pick one main proposer. And real systems need a long list of decisions, not one, so they run a version called Multi-Paxos with many details left to the builder.",
       ],
-      diagrams: ["dist-paxos-phases"],
+      figure: "ticket-posts",
       remember: "Paxos collects promises from a majority, then gets a majority to accept, always reusing any value that may already have won.",
     },
     {
@@ -86,7 +86,7 @@ export const topic: Topic = {
         "Why random timers? If every timer rang at the same moment, everyone would ask for votes at once, the votes would split, and nobody would win. With random timers, one usually rings first and wins before the others wake up. If a vote does split, they simply try again in a new term with new random timers.",
         "Two more safety rules. A computer refuses to vote for a candidate whose notebook is behind its own, so a new leader always has every committed line. And if an old leader wakes up and sees a bigger term number, it knows it was replaced and quietly becomes a follower.",
       ],
-      diagrams: ["dist-raft-election"],
+      figure: "egg-timers",
       remember: "Random timers pick a candidate, a majority of votes makes a leader, and a bigger term number always wins.",
     },
     {
@@ -104,7 +104,7 @@ export const topic: Topic = {
         "If a lock only saves effort, like not printing the same report twice, a simple lock in a single Redis server (a fast, popular in-memory store) is fine, because a rare double only wastes a little work.",
         "Fencing only works if the storage checks the number. The lock alone cannot stop a frozen computer.",
       ],
-      diagrams: ["dist-fencing-tokens"],
+      figure: "key-hook",
       remember: "Lend the lock with a time limit, and stamp every write with a growing number so stale holders are turned away.",
     },
   ],

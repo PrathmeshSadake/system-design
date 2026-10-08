@@ -30,7 +30,7 @@ export const topic: Topic = {
         "So each context owns its own model and its own data, and the rooms connect through shared IDs, like the order number. Usually one team owns one context, so that team can change its own room without asking everyone else for permission.",
         "The trade-off is some repetition. The same customer might be stored in two contexts with different details, and those copies have to be kept up to date through messages. That is a fair price for rooms that can change on their own.",
       ],
-      diagrams: ["ddd-order-rooms"],
+      figure: "three-rooms",
       remember: "One room, one meaning. Let each context own its own words and its own data.",
     },
     {
@@ -43,7 +43,7 @@ export const topic: Topic = {
         "The anti-corruption layer is a translator at the border. When you must talk to a messy old system or an outside company that uses different words, you put a small layer in between that turns their words into yours, and yours into theirs. That way their model does not leak into your room and muddle your clean language.",
         "The trade-off is extra pieces to build and run. Every translator and every event is more code to look after, so use the simplest door that still keeps the rooms independent.",
       ],
-      diagrams: ["ddd-context-map"],
+      figure: "room-doors",
       remember: "Draw the doors on purpose: APIs to ask, events to announce, and a translator wherever outside words would leak in.",
     },
     {
@@ -56,7 +56,7 @@ export const topic: Topic = {
         "Do not share a database between contexts. If two services read and write the same tables, neither can change those tables without breaking the other, and the wall between them is only pretend. Share data through APIs and events instead.",
         "Watch for signs of a bad border: chatty calls, where one action needs a long string of back and forth requests; transactions that must cover several services again and again; and two teams who always have to change their code at the same time. These usually mean the line is in the wrong place, and the pieces belong in one context.",
       ],
-      diagrams: ["ddd-boundaries"],
+      figure: "cut-wall",
       remember: "Cut along business jobs, keep what changes together inside, and let only a few simple messages cross.",
     },
     {

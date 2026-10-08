@@ -18,7 +18,7 @@ export const topic: Topic = {
         "Choose the key with care. A hot shard is one room with a line out the door while the others sit empty. A celebrity with millions of fans can make one shard hot even with hashing, because all of their activity shares one key. Common fixes are splitting very busy keys into several pieces or giving them special treatment.",
         "Sharding has real costs. A question that needs data from many shards must visit each room and combine the answers. A change that touches two shards at once needs extra teamwork to stay all or nothing. And moving rows when you add shards, called resharding, is slow and risky, which is one reason consistent hashing exists.",
       ],
-      diagrams: ["db-range-vs-hash"],
+      figure: "bookcases",
       remember: "Sharding gives more room and more writing power, so pick a shard key that spreads the work and keeps most questions inside one shard.",
     },
     {
@@ -36,7 +36,7 @@ export const topic: Topic = {
         "Asynchronous copying: the leader says done right away and copies afterward. Fast, but if the leader dies, its newest changes can be lost.",
         "Semi-synchronous copying: wait for one follower, copy to the rest later. A middle path many systems use.",
       ],
-      diagrams: ["db-replication-topologies"],
+      figure: "copy-boards",
       remember: "One leader is simple, many leaders need conflict rules, and no leader needs reads and writes that overlap.",
     },
     {
@@ -49,7 +49,7 @@ export const topic: Topic = {
         "Now add a new server. It lands on one spot and takes over only the keys between it and the server before it, which is one arc of the circle. Every other key stays exactly where it was. On average only about 1 out of N keys moves, instead of nearly all of them. Removing a server is just as gentle: its keys simply move on to the next server clockwise.",
         "With only a few spots, some servers get lucky and own a huge arc while others own a tiny one. The fix is virtual nodes: each real server sits at many spots around the circle, often a hundred or more. The arcs average out, so the load is even, and when a server joins or leaves, its share is spread over many servers instead of landing on one neighbor.",
       ],
-      diagrams: ["db-consistent-hash-ring"],
+      figure: "hash-ring",
       remember: "Walk clockwise to the next server, so adding a server only moves the keys in one arc.",
     },
     {
@@ -61,7 +61,7 @@ export const topic: Topic = {
         "Lag causes strange moments. You post a photo, and it is saved on the leader. You refresh the page, and your read happens to go to a follower that has not copied the photo yet. Your photo seems to vanish. Nothing is broken, the copy is just late, but it feels broken.",
         "If nobody writes for a while, every follower catches up and all copies agree. That is why this style is called eventual consistency. The work is to hide the confusing moments in between, without giving up the speed that followers bring.",
       ],
-      diagrams: ["db-replication-lag"],
+      figure: "echo-stacks",
       remember: "A follower can be behind, so a read from a follower may show the past.",
     },
     {
@@ -74,7 +74,7 @@ export const topic: Topic = {
         "Consistent prefix reads: if a question is written before its answer, everyone should see them in that order. When data is split across shards, the question and the answer may sit on different shards with different lag, so a reader could see the answer first. The fix is to keep related writes in one ordered stream, such as the same shard, or to track which writes depend on which.",
         "Finally, watch the lag itself. Measure how far behind each follower is, take very slow followers out of rotation until they catch up, and for data that must never look old, like a bank balance, use synchronous or semi-synchronous copying or read from the leader. Each of these costs some speed, so use them only where it matters.",
       ],
-      diagrams: ["db-monotonic-reads"],
+      figure: "sticky-seat",
       remember: "Read your own changes from an up-to-date copy, keep each user on one copy, and keep related writes in order.",
     },
   ],

@@ -18,7 +18,7 @@ export const topic: Topic = {
         "HTTP/2 also squeezes the headers, the little address labels that ride along with every request. Many of them repeat on every note, like which browser you use and what kinds of answers you understand. So both sides keep a shared list and send a short number instead of the whole label. This is called header compression.",
         "The weakness is the road underneath. HTTP/2 runs on TCP, a delivery rule that promises every piece arrives in the exact order it was sent. Picture one conveyor belt carrying everyone's toy pieces. If one piece falls off, the whole belt stops until that piece is sent again, even for kids whose pieces were fine. This is called head-of-line blocking, and it hurts most on bumpy networks like a weak phone signal.",
       ],
-      diagrams: ["apinet-multiplex"],
+      figure: "one-belt",
       remember: "HTTP/2 mixes many requests on one connection, but on TCP one lost piece still makes them all wait.",
     },
     {
@@ -31,7 +31,7 @@ export const topic: Topic = {
         "QUIC is also quicker to start. Before two computers can talk safely, they say hello and agree on a secret code for locking their messages, called encryption. TCP with modern encryption needs two back and forth trips before the first real request. QUIC does both in one trip. When you come back to a site you visited before, it can even send the first request with zero waiting trips. A sneaky listener could copy and replay that very first early request, so it is only used for safe things like reading a page.",
         "QUIC gives each conversation its own ID number instead of tying it to the phone's network address. So when you walk out of the house and your phone switches from Wi-Fi to mobile data, the conversation keeps going instead of starting over. The trade-offs: some office and school networks block or slow down UDP, so browsers keep HTTP/2 as a backup, and QUIC does more of its work in ordinary programs, which can cost servers more computing power.",
       ],
-      diagrams: ["apinet-lost-piece"],
+      figure: "three-lanes",
       remember: "HTTP/3 gives every stream its own lane, starts faster, and survives a network switch.",
     },
     {
@@ -44,7 +44,7 @@ export const topic: Topic = {
         "gRPC rides on HTTP/2, so many calls share one connection. It also supports streaming: the server can send a long stream of answers to one question, the client can send a stream of messages, or both can talk at the same time. Each call can carry a deadline, so a slow answer is given up on instead of waited for forever.",
         "It shines when services inside one company talk to each other, because everyone can share the form. The trade-offs: binary messages are hard for people to read while hunting bugs, and web browsers cannot speak gRPC directly, so they need a helper called gRPC-Web plus a small translator in front of the server. Also, since one connection stays open for a long time, the load balancer must spread out single calls, not just connections, or one server ends up doing all the work.",
       ],
-      diagrams: ["apinet-grpc"],
+      figure: "order-form",
       remember: "gRPC is a shared, strict order form plus small binary messages over HTTP/2, great between services.",
     },
     {
@@ -57,7 +57,7 @@ export const topic: Topic = {
         "This is great for chat, multiplayer games, live sports scores and shared drawing boards, where small updates fly back and forth quickly. If only the server ever needs to talk, a simpler one-way stream called Server-Sent Events can be enough.",
         "The costs: every open line holds a little memory on a server, and a popular app may hold millions of lines open at once. Lines drop when a phone loses signal, so apps need reconnect logic that tries again and catches up on anything missed. Load balancers must allow long connections and not hang up on quiet ones, so apps send tiny heartbeat messages (ping and pong) to show they are still there. And when friends are connected to different servers, a message must be passed between servers through a shared message hub.",
       ],
-      diagrams: ["apinet-websocket"],
+      figure: "tin-phone",
       remember: "WebSockets keep one two-way line open so updates arrive right away, but every open line costs the server something.",
     },
     {
@@ -69,7 +69,7 @@ export const topic: Topic = {
         "The front desk does the shared chores once, so each classroom does not have to. It checks badges (authentication, making sure you are who you say you are). It sends you to the right classroom based on what you asked for (routing). It makes sure no visitor comes too often (rate limiting). It can gather answers from several classrooms into one reply, so a phone does not have to make five separate trips. And it writes down who came and went (logging).",
         "The trade-offs: every request makes one extra stop, which adds a little time. Since everyone goes through the front desk, if it breaks, nobody gets in, so gateways run as several copies behind a load balancer. It is also tempting to stuff too much logic into the front desk, which turns it into a slow, crowded bottleneck. Keep the gateway for shared chores, and leave the real work to the services.",
       ],
-      diagrams: ["apinet-gateway"],
+      figure: "front-desk",
       remember: "A gateway is one front door that handles badges, directions and limits for every service behind it.",
     },
     {
@@ -82,7 +82,7 @@ export const topic: Topic = {
         "A layer 7 load balancer opens the letter and reads the request itself: the path like /videos, the headers and the cookies. Now it can be clever. It can send /videos to the video team and /shop to the shop team, keep a user going to the same server using a cookie (sticky sessions), and retry a failed request somewhere else. It can also unlock the encryption itself, called ending TLS, so the servers behind it do not have to. The cost is more work for every single request, and it must hold the keys that unlock the traffic.",
         "Many big systems use both: a layer 4 balancer at the very front to spread huge amounts of traffic cheaply, and layer 7 balancers behind it to make the smart choices.",
       ],
-      diagrams: ["apinet-l4-l7"],
+      figure: "envelope",
       remember: "Layer 4 routes by address and port and is fast. Layer 7 reads the request and is smart.",
     },
     {
@@ -102,7 +102,7 @@ export const topic: Topic = {
         "Sliding window log: exact, but hungry for memory.",
         "Sliding window counter: a good estimate with tiny memory.",
       ],
-      diagrams: ["apinet-token-bucket", "apinet-leaky-bucket", "apinet-windows"],
+      figure: "token-jar",
       remember: "Rate limiting keeps one busy visitor from crowding out everyone else, and turned away requests get a 429 that says try again later.",
     },
   ],

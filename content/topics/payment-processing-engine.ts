@@ -19,7 +19,7 @@ export const topic: Topic = {
         "A payment can touch more than two accounts. When Kim pays 20 dollars for a book, the shop might get 19.40 and the payment company 0.60 as its fee. That is three entries, and they still add up to zero.",
         "Amounts are stored as whole numbers of the smallest coin, like 2,000 cents instead of 20.00 dollars. Computers store decimal fractions in a way that can be very slightly off, and tiny errors pile up over millions of payments. Whole cents are always exact.",
       ],
-      diagrams: ["payments-double-entry"],
+      figure: "balance-scale",
       remember: "Every transaction is two or more entries that add up to zero, counted in whole cents.",
     },
     {
@@ -54,7 +54,7 @@ export const topic: Topic = {
         "The fix is an idempotency key, a fancy name for a ticket number. The phone makes up a unique ticket for each payment and sends the same ticket with every try. The server saves the ticket together with the result, in the same transaction as the payment itself. When a retry arrives with a ticket it has already seen, it does not charge again. It simply hands back the saved answer.",
         "A few details make it safe. If two copies arrive at the very same moment, a lock or a unique rule in the database lets only one through, and the other is told, still working, please try again soon. If the same ticket comes back with a different amount, that is a mistake, and the server refuses it. Tickets are kept for a while, often about 24 hours, then cleared away, so retries must happen within that time.",
       ],
-      diagrams: ["payments-idempotency"],
+      figure: "coat-check",
       remember: "Same ticket, same answer: save the key and the result together, so a retry never charges twice.",
     },
     {
@@ -67,7 +67,7 @@ export const topic: Topic = {
         "If a step fails, the coach runs the undo steps in reverse order. If capture fails, it writes reversing entries in the ledger and voids the hold, so the money is released. If money had already been collected, the undo would be a refund. Every call to an outside service carries its own idempotency key too, because the coach may repeat a step after a crash.",
         "The trade-off is that a saga is not instant and not invisible. For a short while, other parts of the system can see a half finished payment, like money on hold, so screens and reports must clearly show states such as pending.",
       ],
-      diagrams: ["payments-saga"],
+      figure: "layaway-track",
       remember: "Do the steps in order, write down progress, and on failure undo the finished steps in reverse.",
     },
     {
@@ -79,7 +79,7 @@ export const topic: Topic = {
         "Each payment should appear in both places with the same amount. Lines that are missing on one side, or that have different amounts, are flagged. A person or an automatic job then follows up, and any fix is made with new ledger entries, never by editing old ones.",
         "Reconciliation does not prevent mistakes. It catches them. It is the last safety net under all the other ideas on this page.",
       ],
-      diagrams: ["payments-reconciliation"],
+      figure: "two-ledgers",
       remember: "Compare the ledger with the bank's records every day, and fix any mismatch with new entries.",
     },
   ],

@@ -34,7 +34,7 @@ export const topic: Topic = {
         "Let us say 1 million kids use our drawing app, and each one asks for something 10 times a day. That is 10 million knocks in one day. Divide by 100,000 seconds and we get about 100 knocks every second.",
         "But kids do not knock evenly all day. Right after school, everyone rushes in at once. So we plan for the busy time, called the peak, by multiplying by about 2 to 5. If we pick 3, we should be ready for about 300 knocks every second.",
       ],
-      diagrams: ["rps-math"],
+      figure: "rush-hours",
       remember: "Daily requests divided by 100,000 gives the average per second. Then multiply for the busy times.",
     },
     {
@@ -46,7 +46,7 @@ export const topic: Topic = {
         "Imagine 1 million drawings are saved every day, and each one is about 1 megabyte, which is roughly the size of one small photo. That is 1 million megabytes a day, which is about 1 terabyte. After a month, that is about 30 terabytes. After a year, about 365 terabytes.",
         "We also keep spare copies in case a toy box breaks. Most systems keep 3 copies, so one year of drawings really needs about 1,100 terabytes. That is about 1 petabyte, which is a thousand terabytes.",
       ],
-      diagrams: ["storage-growth"],
+      figure: "toy-box",
       remember: "Things saved per day, times size, times days kept, times copies.",
     },
     {
@@ -69,7 +69,7 @@ export const topic: Topic = {
         "Disk is like big shelves down in the basement. It holds a huge amount, it is cheap, and things stay there even when the power is off. But walking down to the basement takes much longer. Grabbing a random thing from even a fast disk is often about a thousand times slower than grabbing it from memory.",
         "A handy rule is that a small part of our stuff gets used most of the time. Often about 20 percent of the things are asked for about 80 percent of the time. So we keep that busy 20 percent on the desk, and everything else in the basement. If our app touches 10 gigabytes of different things each day, about 2 gigabytes of memory might be enough to answer most knocks quickly.",
       ],
-      diagrams: ["memory-disk"],
+      figure: "desk-basement",
       remember: "Keep the popular things in fast, small memory. Keep everything in big, slower disk.",
     },
   ],

@@ -24,7 +24,7 @@ export const topic: Topic = {
         "Each reader keeps its own bookmark.",
         "Old notes are deleted after a set time or size, read or not.",
       ],
-      diagrams: ["hts-belt"],
+      figure: "diary-belt",
       remember: "A stream is a diary that many readers share, not an in-tray that empties.",
     },
     {
@@ -37,7 +37,7 @@ export const topic: Topic = {
         "Order is only kept inside one belt. If Mia's note is on belt 0 and Leo's note is on belt 2, nobody promises which one is read first. Usually that is fine, because we mostly care about the order of one person's notes.",
         "There are weak spots. If one key is extremely busy, like a famous user, its belt gets crowded while the others sit quiet. This is called a hot key. The number of belts also limits how many helpers in one team can work at once. And if you add belts later, the recipe sends keys to new places, so a key's new notes may land on a different belt than its old ones, and their order across that change is no longer guaranteed. So pick the number of belts with room to grow.",
       ],
-      diagrams: ["hts-partitions"],
+      figure: "three-belts",
       remember: "Same key, same belt, same order. Different belts, no promise about order.",
     },
     {
@@ -50,7 +50,7 @@ export const topic: Topic = {
         "Each team keeps its own bookmarks. The billing team and the analytics team both read every note, each at its own speed, without getting in each other's way. How far a team's bookmark is behind the newest note is called consumer lag. Lag that keeps growing means the team cannot keep up and needs more helpers, or more belts.",
         "When a helper joins, leaves or crashes, the team hands the belts out again. This is called rebalancing, and it can pause reading for a short time. Also, a helper usually moves its bookmark after it finishes the work. If it crashes in between, the next helper redoes those few notes. So the work should be safe to do twice.",
       ],
-      diagrams: ["hts-consumer-groups"],
+      figure: "belt-helpers",
       remember: "Inside a team, one belt has one reader. Different teams each read everything, with their own bookmarks.",
     },
     {
@@ -75,7 +75,7 @@ export const topic: Topic = {
         "But then, when is a bucket finished? A watermark is the processor's best guess, saying: we believe every note from before 3:00 has now arrived. When the watermark passes the end of a window, the window closes and its answer is sent out. A note that shows up after that is late. It can be dropped, put in a separate pile, or used to fix the answer if we agreed to wait a little longer.",
         "This is a real trade-off. Waiting longer gives more complete answers, but slower ones. Closing early gives fast answers that may miss a few late notes.",
       ],
-      diagrams: ["hts-windows"],
+      figure: "time-trays",
       remember: "Count in time buckets by when things happened, and let a watermark decide when a bucket is done.",
     },
     {
@@ -88,7 +88,7 @@ export const topic: Topic = {
         "Push breaks down for stars. An account with 50 million followers would need 50 million copies for every single post, and the last copies would land long after the first. Pull breaks down for readers who follow thousands of accounts, because every refresh gathers from all of them.",
         "So most big social apps use a hybrid. Posts from normal accounts are pushed into feeds ahead of time. Posts from the few huge accounts are not copied. They are pulled when someone reads, and merged into the ready-made feed. Most of the work is done early, and nobody has to make 50 million copies.",
       ],
-      diagrams: ["hts-fanout"],
+      figure: "cubbies",
       remember: "Push makes reads fast, pull makes posting cheap, and the hybrid pushes for most people but pulls for stars.",
     },
   ],

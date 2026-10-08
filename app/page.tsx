@@ -1,63 +1,79 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
-import { TopicBrowser } from "@/components/TopicBrowser";
-import { getSummaries } from "@/lib/summaries";
+import { HeroFigure } from "@/components/HeroFigure";
+import { caseStudies, concepts } from "@/content";
+import type { Topic } from "@/lib/types";
 
-const steps = [
-  {
-    title: "Start with a picture",
-    text: "Each topic begins with an everyday story, like a lunch line or a toy box.",
-  },
-  {
-    title: "Look at the drawings",
-    text: "Simple diagrams show how the pieces connect. Some of them even move.",
-  },
-  {
-    title: "Learn the grown-up words",
-    text: "At the end of each page, the real names are matched to their simple meanings.",
-  },
-];
+const at = (i: number) => ({ "--i": i }) as CSSProperties;
+const two = (n: number) => String(n).padStart(2, "0");
+
+function Rows({ items }: { items: Topic[] }) {
+  return (
+    <ol className="lesson-list">
+      {items.map((t, i) => (
+        <li key={t.slug}>
+          <Link href={`/topics/${t.slug}/`} className="lesson-row">
+            <span className="lesson-num" aria-hidden="true">
+              {two(i + 1)}
+            </span>
+            <span className="lesson-title">
+              {t.title}
+              {t.area ? <span className="block text-[12.5px] font-normal text-[var(--color-muted)]">{t.area}</span> : null}
+            </span>
+            <span className="lesson-short">{t.short}</span>
+          </Link>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 export default function HomePage() {
-  const summaries = getSummaries();
-  const first = summaries[0];
+  const first = concepts[0];
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6">
-      <section className="pb-12 pt-12 sm:pt-16" aria-labelledby="hero-heading">
-        <p className="text-sm font-semibold uppercase tracking-wide text-sky-800">System design for curious minds</p>
-        <h1 id="hero-heading" className="mt-3 max-w-3xl text-4xl font-bold leading-tight text-slate-900 sm:text-5xl">
-          Big computer ideas, told with small words.
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-700">
-          The apps you use every day are run by huge teams of computers working together. Here you will learn how they
-          share the work, remember things, and keep going when something breaks, using playgrounds, toys, and snacks
-          instead of hard words.
+    <div className="mx-auto max-w-[1080px] px-[var(--gutter)] pb-20">
+      <section aria-labelledby="hero" className="rise grid justify-items-center pt-[clamp(48px,9vh,96px)] text-center">
+        <p className="mono-label" style={at(0)}>
+          System design for curious kids
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href={`/topics/${first.slug}/`}
-            className="rounded-full bg-sky-800 px-5 py-3 text-base font-semibold text-white shadow-sm hover:bg-sky-900"
-          >
-            Start with lesson one
+        <h1 id="hero" className="hero-title mt-5" style={at(1)}>
+          Big computer systems, explained <em>small.</em>
+        </h1>
+        <p className="hero-sub" style={at(2)}>
+          How apps share the work, remember things and keep going when something breaks, told with lunch lines, toy
+          boxes and cookie jars. Every drawing answers your pointer.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3" style={at(3)}>
+          <Link className="btn btn-primary" href={`/topics/${first.slug}/`}>
+            Start lesson one
           </Link>
-          <Link
-            href="#topics"
-            className="rounded-full border border-slate-300 bg-white px-5 py-3 text-base font-semibold text-slate-800 hover:bg-slate-50"
-          >
-            See every topic
+          <Link className="btn" href="#lessons">
+            See all twenty
           </Link>
         </div>
-        <ol className="mt-12 grid gap-4 sm:grid-cols-3">
-          {steps.map((s, i) => (
-            <li key={s.title} className="rounded-2xl border border-slate-200 bg-white p-5">
-              <span className="text-sm font-semibold text-slate-500">Step {i + 1}</span>
-              <h2 className="mt-1 text-lg font-bold text-slate-900">{s.title}</h2>
-              <p className="mt-2 text-[15px] leading-relaxed text-slate-700">{s.text}</p>
-            </li>
-          ))}
-        </ol>
+        <div className="hero-art" style={at(4)}>
+          <HeroFigure />
+        </div>
       </section>
-      <section id="topics" aria-label="All topics" className="border-t border-slate-200 pt-12">
-        <TopicBrowser topics={summaries} />
+
+      <section id="lessons" aria-labelledby="lessons-h" className="mx-auto mt-16 max-w-[880px]">
+        <div className="mb-6 flex items-baseline justify-between gap-4">
+          <h2 id="lessons-h" className="text-[20px] font-medium tracking-[-0.015em]">
+            Lessons
+          </h2>
+          <p className="mono-label">{concepts.length} building blocks</p>
+        </div>
+        <Rows items={concepts} />
+      </section>
+
+      <section id="stories" aria-labelledby="stories-h" className="mx-auto mt-20 max-w-[880px]">
+        <div className="mb-6 flex items-baseline justify-between gap-4">
+          <h2 id="stories-h" className="text-[20px] font-medium tracking-[-0.015em]">
+            Real world stories
+          </h2>
+          <p className="mono-label">{caseStudies.length} case studies</p>
+        </div>
+        <Rows items={caseStudies} />
       </section>
     </div>
   );
