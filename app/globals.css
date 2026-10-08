@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --color-paper: #fbfaf7;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: #1e293b;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Section headings leave room for the sticky header when jumped to. */
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+:focus-visible {
+  outline: 3px solid #0369a1;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Diagram animations */
+.diagram svg text {
+  font-family: inherit;
+}
+
+.diagram .grow {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: grow 1.2s ease-out both;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.diagram .pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.diagram .blink {
+  animation: blink 2.4s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.diagram-scroll {
+  scrollbar-width: thin;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .diagram .motion {
+    display: none;
+  }
+  .diagram .grow,
+  .diagram .blink {
+    animation: none;
+  }
+}
