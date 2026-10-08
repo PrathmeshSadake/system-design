@@ -18,7 +18,7 @@ const disc = (r, n = 14) => rrect(-r, -r, r, r, r, n);
 function mount({ stage, svg, read }, value) {
   const bag = disposer();
   let lift = value;
-  const C = Cam(45, 0.5, 2.55);
+  const C = Cam(45, 0.5, 3.0);
   fit(C, [[-R, -R, -4], [R, R, -4], [R, -R, -4], [-R, R, -4], [-38, -38, 14]], 200, 166);
   const P = proj(C), front = facing(C);
   const g = mk("g", {}, svg);
@@ -94,7 +94,7 @@ hairline({
   name: "canary-seats",
   means: "A hundred seats, and a few try the new version first. Raise the pointer to widen the slice from 1 to 5 to 25 to every seat.",
   rules: [1, 2, 4, 5],
-  range: [4, 8, 12],
-  tour: [[150, 150], [210, 130], [260, 160], null],
+  range: [6, 10, 14],
+  tour: [[200, 245], [200, 150], [200, 90], null],
   mount,
 });

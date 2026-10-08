@@ -140,7 +140,7 @@ function mount({ stage, svg, read }, value) {
 
 hairline({
   name: "room-doors",
-  means: "Rooms joined only where they need to talk: a desk to ask at, doors for news, and a translator before the room that speaks differently.",
+  means: "Rooms joined only where they talk: a desk to ask at, doors for news, a translator before the odd room. Point at a doorway to open it.",
   rules: [1, 2, 4, 6],
   range: [45, 70, 90],
   tour: [[157, 145], [236, 148], [257, 194], null],

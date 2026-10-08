@@ -1,6 +1,6 @@
 /**
  * Two books: a small spiral notebook (the cache) and a big open book (the
- * database) on a desk, with a pen. Where the pointer sits between them picks a
+ * database) on a desk, with a pen standing in a cup. Where the pointer sits between them picks a
  * write policy, and the pen writes the new line where that policy says:
  * near the notebook, write-back (the notebook now, the book later, so its line
  * is still dashed); between them, write-through (both, the book a moment
@@ -9,12 +9,13 @@
  * slider is how much later the book's line comes, in ms.
  */
 const {
-  Cam, clamp, facing, fit, lerp, open, prism, proj, rings, tdone, tset, tval, tween,
+  Cam, clamp, facing, fit, hull, lerp, open, poly, prism, proj, ringAt, rings, rrect, run, tdone, tset, tval, tween,
   disposer, flatDot, mk, place, pointer, put, register, solid,
 } = HL;
 
-const NB = [0, 32, 32, 56], BK = [40, -6, 96, 34], NBZ = 4, BKZ = 8;
+const NB = [0, 32, 32, 56], BK = [40, -6, 96, 34], NBZ = 4, BKZ = 8, CUP = [18, 10];
 const POLICY = ["write-back", "write-through", "write-around"];
+const LR = (pts) => (pts[0][0] <= pts[pts.length - 1][0] ? pts : pts.slice().reverse());
 
 function mount({ stage, svg, read }, value) {
   const bag = disposer();
@@ -43,8 +44,18 @@ function mount({ stage, svg, read }, value) {
     { el: line(5, 5, 48, NBZ, "nf"), len: tween(0), x0: 5, x1: 21, y: 48, z: NBZ },
     { el: line(72, 72, 2 + 3 * 5.5, BKZ, "nf"), len: tween(0), x0: 72, x1: 90, y: 2 + 3 * 5.5, z: BKZ },
   ];
-  // the pen: an upright barrel with a nib, a clip and a cap
-  const pen = { x: tween(36), y: tween(46), z: tween(0), parts: [solid(g), solid(g), solid(g)], drawn: "" };
+  // a pen cup at the back of the desk: far half, the pen's slot, near half
+  const cup = rrect(CUP[0] - 5, CUP[1] - 5, CUP[0] + 5, CUP[1] + 5, 5, 8), rim = rrect(CUP[0] - 3.8, CUP[1] - 3.8, CUP[0] + 3.8, CUP[1] + 3.8, 3.8, 8);
+  mk("path", { d: poly(hull(ringAt(P, cup, 0).concat(ringAt(P, cup, 12)))), class: "sil" }, g);
+  mk("path", { d: poly(ringAt(P, rim, 12)), class: "nf" }, g);
+  const inCup = mk("g", {}, g), rF = LR(ringAt(P, run(rim, front), 12)), cT = LR(ringAt(P, run(cup, front), 12)), cB = LR(ringAt(P, run(cup, front), 0));
+  mk("path", { d: poly([...rF, cT[cT.length - 1], ...cB.slice().reverse(), cT[0]]), class: "fo" }, g);
+  mk("path", { d: open(rF), class: "nf" }, g);
+  mk("path", { d: open([cT[0], ...cB, cT[cT.length - 1]]), class: "nf sil" }, g);
+  // the pen: an upright barrel with a nib and a cap; it lives in the cup, or above everything when it writes
+  const top = mk("g", {}, g);
+  const pen = { x: tween(CUP[0]), y: tween(CUP[1]), z: tween(4), parts: [solid(inCup), solid(inCup), solid(inCup)], drawn: "" };
+  const penHome = () => pen.parts.forEach((p) => inCup.append(p.g)), penOut = () => pen.parts.forEach((p) => top.append(p.g));
   const strokes = [old, ...fresh];
 
   function drawPen(x, y, z) {
@@ -57,6 +68,7 @@ function mount({ stage, svg, read }, value) {
     put(pen.parts[2], prism(P, front, c, ci, z + 24, z + 30));
   }
 
+  let act = null;
   const B = register(stage, (_dt, now) => {
     let moving = false;
     for (const s of strokes) {
@@ -66,6 +78,7 @@ function mount({ stage, svg, read }, value) {
     }
     drawPen(tval(pen.x, now), tval(pen.y, now), tval(pen.z, now));
     if (!tdone(pen.x, now) || !tdone(pen.y, now) || !tdone(pen.z, now)) moving = true;
+    else if (act === -1) penHome();
     return moving;
   });
   bag.add(B.unregister);
@@ -78,7 +91,6 @@ function mount({ stage, svg, read }, value) {
     return t < 0.33 ? 0 : t < 0.67 ? 1 : 2;
   }
 
-  let act = null;
   function choose(k) {
     if (k === act) return;
     act = k;
@@ -90,7 +102,8 @@ function mount({ stage, svg, read }, value) {
     fresh[0].el.setAttribute("class", toNb ? "nf hi" : "nf");
     fresh[1].el.setAttribute("class", k === 0 ? "nf dash" : k > 0 ? "nf hi" : "nf");
     // the pen goes to the page it writes on last; at rest it stands on the desk
-    const [px, py, pz] = k < 0 ? [36, 46, 0] : k === 0 ? [21, 48, NBZ + 1] : [90, 2 + 3 * 5.5, BKZ + 1];
+    if (k >= 0) penOut();
+    const [px, py, pz] = k < 0 ? [CUP[0], CUP[1], 4] : k === 0 ? [21, 48, NBZ + 1] : [90, 2 + 3 * 5.5, BKZ + 1];
     tset(pen.x, px, now, 0); tset(pen.y, py, now, 0); tset(pen.z, pz, now, 0);
     pen.parts[1].sil.classList.toggle("hi", k < 0);
     read.textContent = k < 0 ? "rest" : POLICY[k];
@@ -112,6 +125,6 @@ hairline({
   means: "A small notebook (the cache) and a big book (the database). Move the pointer between them to choose which one the pen writes in.",
   rules: [1, 4, 5, 8],
   range: [100, 300, 600],
-  tour: [[120, 180], [200, 160], [280, 140], null],
+  tour: [[115, 156], [183, 174], [252, 166], null],
   mount,
 });
