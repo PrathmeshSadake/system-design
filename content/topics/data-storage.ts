@@ -96,7 +96,7 @@ export const topic: Topic = {
       simple: "Plan the shelves around the questions you will ask",
       body: [
         "A schema is the plan for how data is shaped: which tables or documents, which fields, and how they link. A good schema starts from the questions the app asks most, called access patterns. If the home screen shows each kid with their class and teacher a million times a day, the data should make that exact question easy.",
-        "Normalizing means storing each fact in exactly one place. The teacher's name lives only in the classes table, and each kid just points to a class. If the teacher changes her name, you fix it once, and no copy can disagree. The cost is that reads need joins to put the pieces back together.",
+        "Normalizing means storing each fact in exactly one place. The teacher's name lives only in the classes table, and each kid just points to a class. If the teacher's name changes, you fix it once, and no copy can disagree. The cost is that reads need joins to put the pieces back together.",
         "Denormalizing means copying some facts on purpose, so a read gets everything in one look, with no join. It is worth it when reads vastly outnumber writes. The cost is that every copy must be updated when the fact changes, and one missed copy means two places tell different stories.",
       ],
       points: [

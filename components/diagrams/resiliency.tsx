@@ -79,7 +79,7 @@ function Jitter() {
           />
         ))}
         <Line d={path([110, cap], [820, cap])} color={tones.slate.stroke} dashed width={1.5} />
-        <Label x={capX} y={cap - 18} text="most the server can handle at once" size={13} />
+        <Label x={capX} y={cap - 18} text="the most the server can handle at once" size={13} />
         <Line d={path([110, base], [820, base])} color={tones.slate.stroke} />
         {[0, 100, 200, 300, 400].map((t) => (
           <Label key={t} x={x(t)} y={base + 18} text={`${t} ms`} size={13} />

@@ -126,8 +126,8 @@ function LeaderboardSortedSet() {
       width={880}
       height={480}
       title="A sorted set keeps itself in order"
-      description="Before the update, Mia is in fifth place with 85 points. The command ZINCRBY adds 30 points to Mia. After the update, Mia has 115 points and the sorted set has moved her to second place, while everyone else keeps their order."
-      caption="Only Mia's entry is moved. The players she passed slide down one place without anyone rewriting them."
+      description="Before the update, Mia is in fifth place with 85 points. The command ZINCRBY adds 30 points to Mia. After the update, Mia has 115 points and the sorted set has moved Mia to second place, while everyone else keeps their order."
+      caption="Only Mia's entry is moved. The players Mia passed slide down one place without anyone rewriting them."
     >
       <Label x={170} y={50} text="Before" size={15} weight={700} color={tones.slate.text} />
       <Label x={710} y={50} text="After" size={15} weight={700} color={tones.slate.text} />

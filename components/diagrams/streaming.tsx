@@ -204,7 +204,7 @@ function Fanout() {
       width={900}
       height={590}
       title="Fan-out on write versus fan-out on read"
-      description="Top: with fan-out on write, Mia's new post is copied into Leo's, Ava's and Sam's feeds right away, so when Leo opens the app he reads one ready list. The weak spot is a star with fifty million fans, which needs fifty million copies per post. Bottom: with fan-out on read, each account's posts are saved once, and when Leo opens the app the system gathers posts from everyone he follows and merges them, which is slower, but posting is cheap."
+      description="Top: with fan-out on write, Mia's new post is copied into Leo's, Ava's and Sam's feeds right away, so when Leo opens the app there is one ready list to read. The weak spot is a star with fifty million fans, which needs fifty million copies per post. Bottom: with fan-out on read, each account's posts are saved once, and when Leo opens the app the system gathers posts from everyone Leo follows and merges them, which is slower, but posting is cheap."
       caption="Push does the work when someone posts. Pull does the work when someone reads."
     >
       <Group x={30} y={30} w={840} h={232} label="Fan-out on write (push): copy at posting time" tone="sky" />
