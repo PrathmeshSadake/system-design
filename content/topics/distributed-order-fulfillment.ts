@@ -30,7 +30,7 @@ export const topic: Topic = {
         "A compensation is not a magic eraser. The payment really happened, so its undo is a new action, a refund, and it shows up on the bank statement. And while a saga is still running, other people can see the in-between states, like a bike that is reserved but not yet paid for.",
         "The coach also keeps an eye on the clock. If an event does not come back in time, say the warehouse has not packed the bike after two days, a timeout fires. The coach can retry, try another warehouse, or escalate, which means alerting a person to take a look.",
       ],
-      diagrams: ["fulfill-services", "fulfill-compensation"],
+      figure: "relay-baton",
       remember: "The orchestrator sends commands, listens for events, watches the clock, and runs undo steps when something fails.",
     },
     {
@@ -42,7 +42,7 @@ export const topic: Topic = {
         "The rules list which moves are allowed, like the arrows printed on the board. Placed can move to Stock reserved. Paid can move to Packed. But Shipped can never jump back to Placed. If a message asks for a move that is not on the list, the order refuses it and someone is told. This turns a big, foggy question (what on earth is going on with this order) into a short, clear list that both people and programs can check.",
         "It also makes repeated messages harmless. Messages sometimes arrive twice. If the order is already Paid and a second payment received message shows up, the rules say that move is already done, so we ignore it instead of charging twice or packing two bikes.",
       ],
-      diagrams: ["fulfill-state-machine"],
+      figure: "board-game",
       remember: "One state at a time, and only the moves on the list are allowed.",
     },
     {
@@ -66,7 +66,7 @@ export const topic: Topic = {
         "So after a set number of tries, say 5, the message is moved to a dead-letter queue, a special problem pile on the side. The main line keeps moving. An alert tells a person, who finds the cause and fixes it, maybe in the code, maybe in the data. Then they redrive the message, which means putting it back into the main queue to be processed again.",
         "A dead-letter queue must be watched. If nobody looks, it becomes a black hole where orders quietly disappear, and a customer waits for a bike that is never coming. Good teams alert as soon as anything lands there and keep track of how long messages sit in it.",
       ],
-      diagrams: ["fulfill-dlq"],
+      figure: "problem-pile",
       remember: "Retry hiccups with growing waits, move stubborn messages to a watched problem pile, and replay them after a fix.",
     },
     {
@@ -78,7 +78,7 @@ export const topic: Topic = {
         "There is one more trap. When the payment helper finishes, it must do two things: save the order as Paid in its database, and send a message saying the order was paid. If it saves and then crashes before sending, nobody hears the news and the bike is never packed. If it sends first and then crashes before saving, everyone hears news that its own records do not show.",
         "The transactional outbox fixes this. In one single save, called a transaction, which happens completely or not at all, the helper writes both the new order state and the message into an outbox table in the same database. A separate helper, the relay, reads new rows from the outbox, sends them to the queue, and marks them as sent. If anything crashes, the message is still waiting in the outbox. It might be sent twice, which is fine, because the handlers on the other side are idempotent.",
       ],
-      diagrams: ["fulfill-outbox"],
+      figure: "rubber-stamp",
       remember: "Save the change and its message together, and make every handler safe to run twice.",
     },
   ],

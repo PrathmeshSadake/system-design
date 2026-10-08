@@ -4,14 +4,21 @@
   "private": true,
   "description": "System design concepts explained with simple, everyday stories and pictures.",
   "scripts": {
+    "figures": "node scripts/figures.mjs",
+    "predev": "node scripts/figures.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/figures.mjs",
     "build": "next build",
     "start": "npx serve@14 out",
+    "pretypecheck": "node scripts/figures.mjs",
     "typecheck": "tsc --noEmit",
     "check:content": "node scripts/check-content.mjs",
-    "check:diagrams": "node scripts/check-diagrams.mjs"
+    "check:figures": "node scripts/check-figures.mjs"
   },
   "dependencies": {
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@lucasmarkes/hairline": "^0.3.0",
+    "geist": "^1.7.2",
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"

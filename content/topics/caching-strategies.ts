@@ -18,7 +18,7 @@ export const topic: Topic = {
         "The most common way to use a cache is called cache-aside, or lazy loading. The app checks the cache first. On a miss, it reads the database, saves a copy in the cache, and then answers. Only things people actually ask for end up in the cache, and if the cache breaks, the app can still go to the database, just more slowly.",
         "The trade-offs: the first request for anything is always a miss, a copy can grow old when the real data changes, and the cache is one more system to run. A cache is also the wrong place for the only copy of anything, because it can lose what it holds.",
       ],
-      diagrams: ["caching-aside"],
+      figure: "backpack",
       remember: "Check the cache first. On a miss, read the database and save a copy for next time.",
     },
     {
@@ -30,7 +30,7 @@ export const topic: Topic = {
         "The most common rule is LRU, which stands for least recently used: throw out the thing nobody has asked for in the longest time. If you have not touched the grapes in your backpack all week, they go first, and the snacks you keep reaching for stay. Some caches use LFU, least frequently used, which counts how often something is asked for instead of how recently.",
         "Copies can also carry a timer, called a TTL (time to live). When the timer runs out, the copy is thrown away even if there is plenty of room, so the next request fetches a fresh one. Short timers keep copies fresh but cause more misses. Long timers give more hits but older copies.",
       ],
-      diagrams: ["caching-lru"],
+      figure: "cubby-row",
       remember: "LRU makes room by dropping what was used least recently. TTL drops copies that have grown too old.",
     },
     {
@@ -43,7 +43,7 @@ export const topic: Topic = {
         "CDNs work best for files that are the same for everyone and change rarely. To update a file, the safest trick is to give the new version a new name, like logo.v2.png or a name with a fingerprint of its contents, so edges never mix up old and new. You can also ask the CDN to throw a copy away (a purge), but that takes a little time to reach every edge.",
         "The trade-offs: the first visitor near each edge still waits for the origin, personal or fast-changing pages usually cannot be shared from the edge, and clearing stale copies out of edges all over the world takes care.",
       ],
-      diagrams: ["caching-cdn"],
+      figure: "ice-cream-trucks",
       remember: "A CDN keeps copies of files near people, so most visits are short trips and the origin can rest.",
     },
     {
@@ -82,7 +82,7 @@ export const topic: Topic = {
         "This is good when new data is rarely read right away, like log messages or a big upload, because the cache does not fill up with things nobody asks for. The cost is that the first read after a write is always a miss, so it is a little slower.",
         "A cousin worth knowing is write-back, also called write-behind. The app writes only to the cache and says done right away. The cache saves the changes to the database a little later, often in batches. Writes are very fast, and the database gets fewer, bigger saves. But if the cache crashes before it saves, those changes are lost, so write-back is used only where that risk is acceptable or the cache keeps its own safe copy.",
       ],
-      diagrams: ["caching-write-policies"],
+      figure: "two-books",
       remember: "Write-around keeps unread data out of the cache. Write-back is the fastest but can lose recent writes.",
     },
     {
@@ -95,7 +95,7 @@ export const topic: Topic = {
         "Fix two, refresh before it expires: a background job refreshes hot keys a little before their timer runs out (refresh-ahead). Or each request, as the timer nears its end, rolls dice with a small but growing chance of refreshing early (probabilistic early expiration), so usually just one request does it, a bit ahead of time. Fix three, add jitter: give each timer a little random extra, like 10 minutes plus or minus 1, so keys made at the same moment do not all expire at the same moment.",
         "Fix four, serve stale while revalidating: keep handing out the old copy for a short while after it expires, while one request quietly fetches a fresh one. Big systems usually use several of these fixes together.",
       ],
-      diagrams: ["caching-stampede", "caching-jitter"],
+      figure: "cookie-jar",
       remember: "When a hot copy expires, let only one request refill it, and spread timers out so they do not all expire together.",
     },
   ],

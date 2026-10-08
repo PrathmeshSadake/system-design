@@ -18,7 +18,7 @@ export const topic: Topic = {
         "This makes a system calmer. A slow helper no longer slows down everyone who talks to it, and a helper that is restarting does not lose its mail, because the mailbox holds it.",
         "The trade-off is that you do not get the answer right away. You only know your note was dropped off, not that the job is done. So notes fit jobs that can happen a little later, like sending a receipt email or shrinking a photo. Questions you need answered right now, like is this password correct, are still best asked on the phone.",
       ],
-      diagrams: ["async-sync-vs-async"],
+      figure: "mailbox",
       remember: "Call when you need the answer now. Leave a note when the job can happen a little later.",
     },
     {
@@ -36,7 +36,7 @@ export const topic: Topic = {
         "A note that fails again and again is moved to a side pile called a dead-letter queue, so it cannot clog the line forever. A person looks at it later.",
         "Watch how long the line is. A line that only ever grows means the helpers cannot keep up.",
       ],
-      diagrams: ["async-queue-workers"],
+      figure: "note-belt",
       remember: "A queue gives each note to one helper, keeps it safe until the helper says done, and smooths out rushes.",
     },
     {
@@ -54,7 +54,7 @@ export const topic: Topic = {
         "Pub/Sub: share the news. Each subscriber gets its own copy.",
         "They are often combined: each subscriber gets its own queue, and several workers share that subscriber's copies.",
       ],
-      diagrams: ["async-pubsub-fanout"],
+      figure: "school-speaker",
       remember: "Publish once, and every subscriber gets its own copy, without the publisher knowing who they are.",
     },
     {
@@ -90,7 +90,7 @@ export const topic: Topic = {
         "Another way is to save the result of the work and the reading bookmark (which message I have read up to) together, all or nothing, in one transaction. Kafka transactions work like this: the output messages and the reader's bookmark are saved together. If a crash happens halfway, neither is kept, and the work is simply done again from the old bookmark.",
         "The trade-off is extra effort: storing ticket numbers, slower saves, and more moving parts. And the promise only covers work inside the system. If the work is sending an email or charging a card through another company, that outside service must also be able to spot repeats.",
       ],
-      diagrams: ["async-delivery-guarantees"],
+      figure: "receipt-spike",
       remember: "Exactly-once is really at-least-once delivery plus skipping repeats, so the work happens one time.",
     },
   ],

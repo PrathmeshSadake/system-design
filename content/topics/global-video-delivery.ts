@@ -30,7 +30,7 @@ export const topic: Topic = {
         "When every chunk is done, a packager labels the pieces and writes the menu files that tell players what exists. The finished files are saved in origin storage, the main warehouse that everything else copies from.",
         "The trade-off is bookkeeping. Something has to track which tickets are finished, make sure every chunk was made with the same settings so the seams never show, and build the final menu only after the very last chunk is done.",
       ],
-      diagrams: ["video-transcode-pipeline"],
+      figure: "loaf-slicer",
       remember: "One job per chunk, many workers at once, and only failed chunks are tried again.",
     },
     {
@@ -42,7 +42,7 @@ export const topic: Topic = {
         "A simple ladder might be 1080p at about 5 megabits per second, 720p at about 3, 480p at about 1.5, and 360p at under 1. Big services tune these steps for each title, because a cartoon with flat colors needs far less data than a fast football game to look good.",
         "A codec is the recipe used to squeeze the video into fewer bytes. H.264 is the old, reliable recipe that almost every device can play. Newer recipes such as AV1 often make files around a third smaller for the same quality, which saves a lot of internet traffic. But they take much more computer time to make, and older devices cannot play them. So a popular title, watched millions of times, is worth extra encodes with the newer recipe, while a rarely watched video may only get the basic ladder.",
       ],
-      diagrams: ["video-bitrate-ladder"],
+      figure: "size-stack",
       remember: "Make every chunk in several sizes, and spend extra computer time on newer recipes only where many viewers will benefit.",
     },
     {
@@ -65,7 +65,7 @@ export const topic: Topic = {
         "If chunks are arriving fast and the buffer is full, the player picks a sharper version for the next chunk. If the internet slows down, for example when a train enters a tunnel, it switches to a smaller version before the buffer runs empty. A blurry picture for a few seconds is much better than a frozen spinning wheel.",
         "Switches happen only between chunks, which is why every version of a chunk starts at the same moment on a keyframe. The trade-off is jumpiness. Switching too eagerly makes the picture flip between sharp and blurry, so good players step down quickly but climb back carefully. Many also start at a lower quality so the video begins fast, then climb.",
       ],
-      diagrams: ["video-abr-switching"],
+      figure: "road-ahead",
       remember: "The player watches its speed and its buffer, and picks the size of each next chunk so the video never stops.",
     },
     {
@@ -78,7 +78,7 @@ export const topic: Topic = {
         "The shield has a special job. When a brand new episode comes out, many caches may miss at the same moment. The shield collapses those identical requests into one trip to the origin and shares the answer, so the origin is not buried. For big premieres, services also copy the video to the edges ahead of time.",
         "Edge space is limited, so rarely watched videos may only live in the higher tiers, and their first viewer waits a little longer. Live streams add one more twist: their menus change every few seconds as new chunks appear, so menus are cached only very briefly, while the chunks themselves never change and can be cached for a long time.",
       ],
-      diagrams: ["video-cdn-tiers"],
+      figure: "corner-shops",
       remember: "Misses climb one level at a time, the shield turns many identical misses into one, and most viewers are served from the shop down the street.",
     },
   ],

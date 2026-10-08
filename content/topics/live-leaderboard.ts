@@ -30,7 +30,7 @@ export const topic: Topic = {
         "Now the news has to reach a million kids spread across many gateways, and no single gateway knows all of them. So we use pub/sub, short for publish and subscribe. It works like the school speaker system. The office says something once, and every classroom speaker plays it. Here, the score service publishes the new top 10 once, every gateway is listening, and each gateway passes it on to its own players.",
         "The weakness is that simple pub/sub does not keep old messages. A gateway that was restarting while the message went out will miss it. For a leaderboard that is fine, because a fresh top 10 arrives again a moment later, and a player who just reconnected can ask for the current board directly.",
       ],
-      diagrams: ["leaderboard-architecture"],
+      figure: "speaker-towers",
       remember: "Score changes wait in a queue on the way in. The top 10 goes out once through pub/sub, and every gateway repeats it to its own players.",
     },
     {
@@ -42,7 +42,7 @@ export const topic: Topic = {
         "Inside, a sorted set uses two helpers together. A hash table is like a phone book: give it a name and it finds that player's score right away. A skip list is like a long line of kids standing in score order, with a few express lanes above it. To find a spot, you ride the express lanes past big chunks of the line, then step down to slower lanes as you get close, the way you flip through a book by chapters before turning single pages.",
         "Thanks to the express lanes, adding points or asking what place someone is in takes about log N steps, where N is the number of players. That means the work grows very slowly. For a million players it is a few dozen steps, not a million. The trade-off is memory. Everything lives in fast but pricey memory, and each entry carries extra links for the express lanes, so a huge board needs a big machine.",
       ],
-      diagrams: ["leaderboard-sorted-set"],
+      figure: "rank-ladder",
       remember: "A sorted set is a phone book to find a player plus a skip list to keep everyone in order, so updates and rank lookups take about log N steps.",
     },
     {
@@ -72,7 +72,7 @@ export const topic: Topic = {
         "A player's own place matters only to that player, so it travels separately. The app asks for it when the player opens the board, or the gateway sends it on a slower beat, like every few seconds. On the way in, the score service can batch its writes too: it gathers a few hundred slips and sends them to Redis together, which saves many round trips.",
         "The trade-off is freshness. A player may see a top 10 that is up to a second old. For a game show, that is a small price for a system that stays calm under a storm of answers.",
       ],
-      diagrams: ["leaderboard-throttle"],
+      figure: "metronome",
       remember: "Send the top 10 on a steady beat, skip it when nothing changed, and send each player's own place separately and less often.",
     },
     {
@@ -85,7 +85,7 @@ export const topic: Topic = {
         "Exact places far down the list are harder with shards, because you would have to ask every shard how many players beat you. Instead, we can keep a count of how many players fall into each score range, like sorting marbles into labeled jars, and tell a player they are around 48,000th. Players far from the top rarely mind a close estimate.",
         "Finally, memory can be wiped. Redis can save copies to disk and keep backup copies on other machines, but the true record of every score should also live in a durable database, one that keeps data safely on disk. If the board is ever lost, we rebuild it from that record. Redis is the fast scoreboard on the wall. The database is the teacher's notebook.",
       ],
-      diagrams: ["leaderboard-shard-merge"],
+      figure: "three-podiums",
       remember: "Split boards by game or time first, merge each shard's top 10 for a global top 10, and keep the real scores in a durable database.",
     },
   ],

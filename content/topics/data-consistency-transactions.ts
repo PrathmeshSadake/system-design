@@ -18,7 +18,7 @@ export const topic: Topic = {
         "If the computer crashes, the database reads the diary when it starts again. Changes that were committed are replayed (redone), so nothing it promised is lost. Changes that never got a commit mark are undone or ignored, so no half-finished trade survives. The data ends up as if the crash happened neatly between two whole changes.",
         "The same diary helps with other jobs. Followers copy the log to stay in step with the leader, and other programs can read it to learn about every change as it happens, which is called change data capture. The costs: every change is written twice, once to the log and once to the page, and old parts of the log must be cleared after a checkpoint (a moment when all earlier changes are known to be on the pages) so the log does not grow forever.",
       ],
-      diagrams: ["tx-wal"],
+      figure: "diary-first",
       remember: "Save the plan in the log first, then change the real data, so a crash can always be cleaned up.",
     },
     {
@@ -31,7 +31,7 @@ export const topic: Topic = {
         "Phase two is commit. If every participant voted yes, the coordinator writes down its decision and tells everyone to commit. If even one said no, or did not answer in time, it tells everyone to abort and undo. Either way, everyone ends up doing the same thing.",
         "The weak spot is the coordinator. If it crashes after the votes but before telling anyone the result, the participants that voted yes are stuck. They promised to obey, so they cannot decide alone, and they keep their rows locked, blocking other work, until the coordinator comes back. 2PC is also slow, because of the extra round trips and long-held locks, and it ties services tightly together. That is why it is usually avoided between microservices (many small, separate services that each own their data) and kept for databases built to support it.",
       ],
-      diagrams: ["tx-2pc"],
+      figure: "permission-slips",
       remember: "In 2PC everyone votes, then all commit or all abort, but a crashed coordinator can leave everyone stuck and locked.",
     },
     {
@@ -47,7 +47,7 @@ export const topic: Topic = {
         "Undo steps must keep trying until they work, so make them safe to repeat.",
         "Put steps that cannot be undone, like sending an email, as late in the chain as possible.",
       ],
-      diagrams: ["tx-saga-compensation"],
+      figure: "domino-undo",
       remember: "A saga is a chain of small saved steps, each with an undo plan that runs backward if a later step fails.",
     },
     {
@@ -60,7 +60,7 @@ export const topic: Topic = {
         "With choreography, there is no conductor. Each service listens for events and reacts, like dancers who know their own moves and follow the music. The flight service announces flight booked. The hotel service hears that, books a hotel, and announces hotel booked, which the car service hears. Failures are events too: car failed tells the earlier services to undo their own steps.",
         "Choreography keeps services loosely tied and makes it easy to add new listeners. But the flow is spread across many services, so nobody can see the whole dance in one place. It is harder to debug, and events can accidentally trigger each other in a loop. A common rule of thumb: choreography for short, simple flows, and orchestration for long or complicated ones.",
       ],
-      diagrams: ["tx-orch-vs-choreo"],
+      figure: "conductor",
       remember: "Orchestration has a conductor that is easy to follow. Choreography has dancers that are loosely tied but harder to follow.",
     },
     {
@@ -73,7 +73,7 @@ export const topic: Topic = {
         "A separate helper, the relay, then picks up new outbox rows, publishes them to the message broker, and marks them sent. It can find new rows by checking the table every so often, called polling, or by reading the database's change log as it happens, which is change data capture.",
         "One catch remains. If the relay sends a message and crashes before marking it sent, it will send it again after it restarts. So delivery is at least once, and receivers must spot and skip repeats, usually by the message ID.",
       ],
-      diagrams: ["tx-dual-write", "tx-outbox"],
+      figure: "outbox-tray",
       remember: "Save the change and its message in one transaction, and let a relay deliver the message later, at least once.",
     },
   ],

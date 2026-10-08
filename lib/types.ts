@@ -1,5 +1,3 @@
-import type { DiagramKey } from "@/components/diagrams";
-
 export type Section = {
   /** Used for the page anchor, for example "token-bucket". */
   id: string;
@@ -11,8 +9,8 @@ export type Section = {
   body: string[];
   /** Optional bullet points shown after the paragraphs. */
   points?: string[];
-  /** Diagrams shown after the text, in order. */
-  diagrams?: DiagramKey[];
+  /** The Hairline figure for this part: a file name in hairline/figures, without .js. */
+  figure?: string;
   /** One sentence to remember. */
   remember?: string;
 };

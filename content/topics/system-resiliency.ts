@@ -18,7 +18,7 @@ export const topic: Topic = {
         "Only retry things that are safe to repeat. Asking for the lunch menu twice is harmless. Charging a card twice is not. An action that gives the same result no matter how many times you do it is called idempotent. For actions like payments, send an idempotency key, a unique ticket number for that request, so the server can notice it already did this one and not do it again.",
         "Retries can also make an outage worse. If a website calls service A, which calls B, which calls C, and every layer makes 3 attempts, one broken C can receive 3 times 3 times 3, which is 27 calls for a single click. This is a retry storm. Good habits are to retry at only one layer, and to keep a retry budget, for example retries may be at most 10 percent of all calls, so retrying stops when something is clearly broken.",
       ],
-      diagrams: ["resil-backoff"],
+      figure: "knock-steps",
       remember: "Retry only safe things, wait longer each time, and know when to give up.",
     },
     {
@@ -31,7 +31,7 @@ export const topic: Topic = {
         "Jitter means adding randomness to each wait. A popular recipe called full jitter picks a random wait between zero and the current backoff. One client waits 23 milliseconds, another 87, another 51. The same number of retries arrive, but spread out in a gentle trickle that the server can handle.",
         "The trade-off is that one request's timing becomes less predictable. Some waits come out shorter and some longer. That is a small price for not trampling the server.",
       ],
-      diagrams: ["resil-jitter"],
+      figure: "slide-crowd",
       remember: "Backoff spreads retries out over time, and jitter spreads them out across clients.",
     },
     {
@@ -44,7 +44,7 @@ export const topic: Topic = {
         "After a cool-down, like 30 seconds, the breaker becomes half-open. It lets a few trial calls through. If they succeed, the breaker closes and life goes back to normal. If one fails, it opens again and waits another cool-down.",
         "A breaker works best with a fallback, which is a plan B answer such as the weather saved earlier today, a default list of popular toys, or a polite message asking people to try again later. The hard part is tuning. Trip too easily and you block a service that was fine. Trip too slowly and your workers pile up waiting.",
       ],
-      diagrams: ["resil-breaker"],
+      figure: "breaker-lever",
       remember: "Closed lets calls through, open fails fast, and half-open tests the water before trusting again.",
     },
     {
@@ -57,7 +57,7 @@ export const topic: Topic = {
         "With bulkheads, each dependency gets its own small pool, say 10 workers for weather and 20 for payments. When weather is slow, only its 10 workers get stuck, and payments keeps running. The same idea works at bigger sizes too: separate servers for big customers and small customers, or a separate copy of a service for each region, so one noisy group cannot hurt the others.",
         "The trade-off is some waste. Split pools cannot lend each other spare workers, so one pool may sit half empty while another is full, and every pool must be sized with care. Bulkheads pair well with timeouts and circuit breakers, which free stuck workers sooner.",
       ],
-      diagrams: ["resil-bulkhead"],
+      figure: "ship-hull",
       remember: "Give each risky dependency its own pool, so one slow friend cannot hold up everyone.",
     },
     {
@@ -70,7 +70,7 @@ export const topic: Topic = {
         "To switch, a traffic director keeps checking each region with health checks, like a teacher calling roll. When a region stops answering, the director (a global load balancer, or DNS, the internet's address book) sends people to the healthy region. DNS answers are remembered by devices for a while, so some people may keep going to the old address until that memory runs out. Data is copied between regions, usually a little behind (asynchronously), so the last few moments of changes may be lost. RPO, the recovery point objective, is how much recent data you can afford to lose. RTO, the recovery time objective, is how long you can afford to be down.",
         "Two dangers remain. A failover you never practice probably will not work, so teams hold game days where they switch over on purpose. And watch out for split brain: if both regions think they are in charge and both accept changes, the data goes two different ways and is very hard to merge. Systems prevent this by making sure only one side can be in charge at a time, for example with a tie-breaking vote from a third place.",
       ],
-      diagrams: ["resil-failover"],
+      figure: "two-buildings",
       remember: "Keep a second region ready, know your RPO and RTO, and practice the switch before you need it.",
     },
   ],

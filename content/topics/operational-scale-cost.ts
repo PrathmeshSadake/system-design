@@ -17,7 +17,7 @@ export const topic: Topic = {
         "FinOps (short for financial operations) is the habit of engineers, finance people, and business leaders working on cloud spending together. It is like a family planning the allowance as a team. The kids know what they need, the parents know the budget, and everyone gets to see the receipts.",
         "The FinOps Foundation, a group that shares good practice, describes the work as a loop with three phases: Inform, Optimize, and Operate. You go around the loop again and again, because every new feature brings new costs.",
       ],
-      diagrams: ["cost-finops-loop"],
+      figure: "loop-track",
       remember: "Cost is everyone's job, and it is a loop you keep repeating, not a one-time cleanup.",
     },
     {
@@ -41,7 +41,7 @@ export const topic: Topic = {
         "We can also pay less for the very same computer by buying it differently. On-demand is full price: pay by the hour and stop anytime. A commitment, such as reserved instances or savings plans, means promising to use a certain amount for one or three years in exchange for a big discount, which suits steady load you are sure about. Spot (or preemptible) computers are spare ones the cloud sells cheaply, but it can take them back with only a short warning, so they suit jobs that can stop and start again, like resizing a big pile of photos.",
         "Old data can also slide to cheaper storage automatically, which we will see in the tiering part. The trade-offs: commitments lock you in if your needs shrink, spot computers can vanish mid-job, and squeezing too hard leaves no spare room for a busy day.",
       ],
-      diagrams: ["cost-purchase-options"],
+      figure: "bus-or-car",
       remember: "First stop paying for what you do not use, then pay less for what you do use.",
     },
     {
@@ -65,7 +65,7 @@ export const topic: Topic = {
         "Second, we respect lead time, which is how long it takes to get more. Buying real servers for our own building can take months. Even in the cloud, very large amounts or special machines may need to be requested ahead of time. So we order before we run out, not when we run out.",
         "Third, we measure the real limit with a load test: we send pretend traffic to a server until it starts to struggle, so we know how much one server can truly handle. Planning for too much wastes money on idle computers. Planning for too little means slow pages, or an outage, on the busiest day of the year.",
       ],
-      diagrams: ["cost-capacity-plan"],
+      figure: "party-chairs",
       remember: "Forecast the peak, add headroom, and order early enough to cover the lead time.",
     },
     {
@@ -78,7 +78,7 @@ export const topic: Topic = {
         "More regions waste less spare room, but they bring new costs. Data must be copied between regions, and cloud providers charge for data that travels from one region to another. Every extra region is more computers to run and watch.",
         "Keeping data correct is harder too. If a kid changes an order in one region while another region still holds the old copy, the two can disagree. Teams handle this by giving each customer a home region for changes, or by carefully merging changes later. And copying data across the world is limited by the speed of light, so waiting for every region to confirm each change makes things slower. Many teams accept a short delay instead.",
       ],
-      diagrams: ["cost-active-active"],
+      figure: "lemonade-stands",
       remember: "With N regions, keep each one at most (N minus 1) out of N busy, so the others can catch a fallen one.",
     },
     {
@@ -91,7 +91,7 @@ export const topic: Topic = {
         "Storage tiers. Hot storage is like the fridge: right there and very fast, but the most expensive place to keep each item. Warm storage is the pantry: a few steps away and cheaper. Cold storage is the attic: cheaper still, but slower, and there is often a small fee each time you fetch something and a minimum time things must stay. Archive is a storage unit across town: the cheapest place to keep things, but getting something back can take hours and costs extra. Lifecycle rules move data down this ladder automatically as it gets older.",
         "Compute tiers. We met these earlier: commitments for the steady base, on-demand for bumps and new work, and spot for jobs that can be interrupted. The trade-off of all tiering is that the choices must be right. Put something in too low a tier and it may be slow or fragile just when it suddenly matters, like an archived file a customer needs today.",
       ],
-      diagrams: ["cost-storage-ladder"],
+      figure: "fridge-attic",
       remember: "Give each thing the care it needs: gold for the critical, cheap shelves for the rarely used.",
     },
   ],

@@ -30,7 +30,7 @@ export const topic: Topic = {
         "Each service records a span: what work it did, when it started, when it ended, and which span called it (its parent). Gather all the spans with the same trace ID and you can draw a waterfall picture. Long bars show where the time went, and indented bars show who called whom.",
         "Keeping every trace is costly, so systems sample, which means they keep only some. Head sampling decides at the very start, for example keep 1 request in 100. Tail-based sampling waits until the request has finished and then decides, so it can keep all the errors and all the slow ones, which are the interesting ones. The cost is holding every span for a short while before choosing. And if one service forgets to pass the trace ID along, the map breaks into separate pieces.",
       ],
-      diagrams: ["obs-trace-propagation", "obs-trace-waterfall"],
+      figure: "parcel-route",
       remember: "One trace ID passed along every hop turns scattered spans into one clear map.",
     },
     {
@@ -43,7 +43,7 @@ export const topic: Topic = {
         "A few habits make logs much more useful. Use the same field names in every service, so trace_id is never also called traceId or tid. Always include the trace ID, so you can jump from one log line to the whole trace. Use levels such as debug, info, warn and error, so you can turn down the noise. And never log secrets or personal details like passwords, card numbers or home addresses, because logs get copied to many places and read by many people.",
         "The trade-off is volume and cost. Structured lines are a bit bigger, and logging every tiny step can cost more than running the app itself. Log what helps you answer questions, not every heartbeat.",
       ],
-      diagrams: ["obs-structured-log"],
+      figure: "log-forms",
       remember: "Write logs as forms with the same fields everywhere, include the trace ID, and leave secrets out.",
     },
     {
@@ -56,7 +56,7 @@ export const topic: Topic = {
         "An SLA, a service level agreement, is a promise to customers that has consequences, like a deal with your parents: if your score drops below 7, no video games this weekend. For a company, breaking it usually means paying money back or giving credits. Because breaking it is costly, the SLA is set looser than the SLO, for example 99.5 percent. That way the team gets a warning, by missing its own goal, long before the promise is broken.",
         "Aim for the right level, not for 100 percent. Every extra nine (going from 99.9 to 99.99 percent) costs a lot more work and money, and users often cannot tell the difference, because their own home internet drops more often than that.",
       ],
-      diagrams: ["obs-sli-slo-sla"],
+      figure: "high-jump",
       remember: "The SLI is what you measure, the SLO is what you aim for, and the SLA is what you promise, usually a bit looser.",
     },
     {
@@ -69,7 +69,7 @@ export const topic: Topic = {
         "The budget also turns arguments into a simple rule. If plenty of budget is left, the team can ship new features faster and take more risks. If the budget is spent, risky launches are frozen and the team works on reliability until things are healthy again. Everyone agrees on this rule ahead of time, so nobody has to argue about it in the middle of a bad day.",
         "An error budget is only as good as its SLI. If you measure the wrong thing, you can have plenty of budget left while users are unhappy.",
       ],
-      diagrams: ["obs-error-budget"],
+      figure: "allowance-jar",
       remember: "The error budget is 1 minus the SLO. Spend it on speed while you have it, and fix reliability when it runs out.",
     },
   ],
