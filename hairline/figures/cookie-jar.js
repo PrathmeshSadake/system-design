@@ -19,7 +19,7 @@ const LR = (pts) => (pts[0][0] <= pts[pts.length - 1][0] ? pts : pts.slice().rev
 function mount({ stage, svg, read }, value) {
   const bag = disposer();
   let R = value;
-  const C = Cam(45, 0.5, 2.0);
+  const C = Cam(45, 0.5, 2.3);
   fit(C, [[-ER, -ER, -4], [ER, -ER, -4], [ER, ER, -4], [-ER, ER, -4], [-RING, -RING * 0.3, 14 + HMAX + 6]], 200, 168);
   const P = proj(C), front = facing(C), g = mk("g", {}, svg);
   put(solid(g), prism(P, front, rrect(-ER, -ER, ER, ER, ER, 16), rrect(-ER + 2.2, -ER + 2.2, ER - 2.2, ER - 2.2, ER - 2.2, 16), -4, 0));
@@ -82,6 +82,7 @@ function mount({ stage, svg, read }, value) {
       k.h.t = over ? k.h0 + HMAX * falloff(u) : k.h0;
       if (over && k !== best && u < 1) wait++;
     }
+    if (best) best.h.t = best.h0 + 3; // the one with the lock walks in; it does not need to stand on tiptoe
     if (best !== lock) {
       lock = best;
       const now = performance.now();
@@ -110,6 +111,6 @@ hairline({
   means: "An empty cookie jar with kids all around. Hungry kids near the pointer stand up, but only one goes to refill the jar while the rest wait.",
   rules: [1, 3, 4, 8],
   range: [30, 50, 90],
-  tour: [[150, 150], [250, 150], [200, 210], null],
+  tour: [[298, 194], [200, 227], [200, 178], null],
   mount,
 });
