@@ -117,10 +117,10 @@ export default async function TopicPage({ params }: Props) {
               ) : null}
               {s.diagrams?.map((d) => <DiagramView key={d} name={d} />)}
               {s.remember ? (
-                <aside className="mt-6 rounded-xl border-l-4 border-emerald-600 bg-emerald-50 px-5 py-4" aria-label="Remember">
+                <div role="note" className="mt-6 rounded-xl border-l-4 border-emerald-600 bg-emerald-50 px-5 py-4">
                   <p className="text-sm font-semibold text-emerald-900">Remember</p>
                   <p className="mt-1 text-[17px] leading-7 text-slate-800">{s.remember}</p>
-                </aside>
+                </div>
               ) : null}
             </section>
           ))}

@@ -83,8 +83,8 @@ export function Diagram({
           viewBox={`0 0 ${width} ${height}`}
           role="img"
           aria-labelledby={`${titleId} ${descId}`}
-          className="mx-auto block h-auto w-full min-w-[540px]"
-          style={{ maxWidth: width }}
+          className="mx-auto block h-auto w-full"
+          style={{ maxWidth: width, minWidth: Math.round(width * 0.72) }}
           fontFamily="inherit"
         >
           <title id={titleId}>{title}</title>
@@ -92,6 +92,9 @@ export function Diagram({
           {children}
         </svg>
       </div>
+      <p className="mt-2 text-xs text-slate-500 sm:hidden" aria-hidden="true">
+        Swipe sideways to see the whole picture.
+      </p>
       {caption ? <figcaption className="mt-4 text-sm leading-relaxed text-slate-600">{caption}</figcaption> : null}
     </figure>
   );
