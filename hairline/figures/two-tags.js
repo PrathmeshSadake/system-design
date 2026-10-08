@@ -9,13 +9,13 @@
  * slider is how far the tag being read stands out.
  */
 const {
-  Cam, facing, fit, poly, prism, proj, rad, rings, rrect, clamp, unproj,
+  Cam, facing, fit, open, poly, prism, proj, rad, rings, rrect, clamp, unproj,
   tween, tset, tval, tdone, mk, place, pointer, put, register, disposer, solid,
 } = HL;
 
-const W = 100, D = 28, H = 44, TZ = 5, TH = 10, TK = 0.9;
+const W = 100, D = 28, H = 44, TZ = 4, TH = 12, TK = 0.9;
 const OPEN = [[5, 28], [34, 66], [72, 95]], OZ = [19, 41];
-const OLD = [35, 49], NEW = [51, 65];
+const OLD = [33, 49], NEW = [51, 67];
 /** Each step: [old tag's dots on, new tag's dots on, which tag is read (0 old, 1 new), old tag peeled]. */
 const STEP = [null, [3, 0, 0, 0], [3, 1, 0, 0], [3, 3, 0, 0], [3, 3, 1, 0], [0, 3, 1, 0], [0, 3, 1, 1]];
 const REST = 2;
@@ -33,7 +33,9 @@ function mount({ stage, svg, read }, value) {
   put(solid(g), prism(P, front, sr, si, 0, H));
   for (const [x0, x1] of OPEN) {
     mk("path", { d: onFace(rrect(x0, OZ[0], x1, OZ[1], 3, 4), D), class: "nf" }, g);
-    mk("path", { d: onFace(rrect(x0 + 1.4, OZ[0] + 1.4, x1 - 1.4, OZ[1] - 1.4, 1.8, 4), D), class: "nf lo" }, g);
+    // looking in: the far wall's left and bottom edges, as much of them as the opening shows
+    const dep = 7, a = x0 + 1.2, b = OZ[0] + 1.2;
+    mk("path", { d: open([P(a, D, b), P(a, D - dep, b), P(x1 - 1.2 - dep, D - dep, b)]) + open([P(a, D - dep, b), P(a, D - dep, OZ[1] - 1.2 - 0.82 * dep)]), class: "nf lo" }, g);
   }
 
   /** A tag: its back, its face and its three dots, posed by where its bottom edge sits and how far it has tipped forward. */
@@ -101,7 +103,7 @@ hairline({
   name: "two-tags",
   means: "Relabel a cubby in six safe steps: stick the new tag on, use both, switch to the new one, then peel the old one off. Slide to step through.",
   rules: [1, 4, 5, 8],
-  range: [1.5, 3, 4.5],
-  tour: [[150, 150], [210, 130], [260, 160], null],
+  range: [2, 4, 6],
+  tour: [[110, 138], [202, 184], [270, 218], null],
   mount,
 });

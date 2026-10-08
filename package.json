@@ -4,15 +4,15 @@
   "private": true,
   "description": "System design concepts explained with simple, everyday stories and pictures.",
   "scripts": {
-    "figures": "node scripts/figures.mjs",
-    "predev": "node scripts/figures.mjs",
+    "figures": "bun scripts/figures.mjs",
+    "predev": "bun scripts/figures.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/figures.mjs",
+    "prebuild": "bun scripts/figures.mjs",
     "build": "next build",
-    "start": "npx serve@14 out",
-    "pretypecheck": "node scripts/figures.mjs",
+    "start": "bunx serve@14 out",
+    "pretypecheck": "bun scripts/figures.mjs",
     "typecheck": "tsc --noEmit",
-    "check:content": "node scripts/check-content.mjs",
+    "check:content": "bun scripts/check-content.mjs",
     "check:figures": "node scripts/check-figures.mjs"
   },
   "dependencies": {
@@ -28,8 +28,9 @@
     "@types/node": "^22.10.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
-    "playwright-core": "^1.56.0",
+    "playwright-core": "1.56.0",
     "tailwindcss": "4.3.3",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.0",
+    "@types/bun": "^1.4.2"
   }
 }

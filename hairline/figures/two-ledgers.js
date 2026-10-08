@@ -112,6 +112,6 @@ hairline({
   means: "Our money book and the bank's, open side by side. Run the pointer down the rows: the one row that does not match lifts out of both.",
   rules: [1, 4, 5, 10],
   range: [6, 10, 16],
-  tour: [[109, 170], [148, 190], [174, 203], null],
+  tour: [[122, 172], [148, 190], [187, 205], null],
   mount,
 });

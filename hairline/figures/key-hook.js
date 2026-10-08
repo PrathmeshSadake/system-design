@@ -96,6 +96,6 @@ hairline({
   means: "One key on a hook, its tag dotted with a count. Each lend adds a dot, a bigger number, so an old holder with a smaller one is turned away.",
   rules: [1, 4, 5, 10],
   range: [14, 24, 34],
-  tour: [[200, 160], [320, 260], [190, 150], null],
+  tour: [[187, 151], [330, 280], [200, 122], null],
   mount,
 });

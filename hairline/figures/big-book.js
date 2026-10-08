@@ -7,7 +7,7 @@
  * from the one picked. At rest the book is bright. The slider is the stagger.
  */
 const {
-  Cam, clamp, facing, fit, open, poly, proj, prism, rad, rings, unproj,
+  Cam, clamp, facing, fit, hull, open, poly, proj, prism, rad, ringAt, rings, unproj,
   tset, tval, tdone, tween, mk, place, pointer, put, register, disposer, solid,
 } = HL;
 
@@ -52,19 +52,23 @@ function mount({ stage, svg, read }, value) {
   const book = mk("g", {}, g), cover = solid(book);
   const [cr, ci] = rings(BX0, BY0, BX1, BY1, 4, 1.4);
   put(cover, prism(P, front, cr, ci, 0, 2));
-  const mid = (BX0 + BX1) / 2;
-  [[BX0 + 3, mid - 1], [mid + 1, BX1 - 3]].forEach(([a, b]) => { const [pr, pi] = rings(a, BY0 + 3, b, BY1 - 3, 3, 1.2); put(solid(book), prism(P, front, pr, pi, 2, 7)); });
+  // each page block rises from its outer edge to the spine, where the two meet in the gutter
+  const mid = (BX0 + BX1) / 2, zl = (x) => 5 + 5 * (x - BX0 - 3) / (mid - BX0 - 3), zr = (x) => 5 + 5 * (BX1 - 3 - x) / (BX1 - 3 - mid);
+  [[BX0 + 3, mid, zl], [mid, BX1 - 3, zr]].forEach(([a, b, zf]) => {
+    const [pr] = rings(a, BY0 + 3, b, BY1 - 3, 2, 1), top = pr.map((q) => P(q.u, q.v, zf(q.u)));
+    put(solid(book), { sil: poly(hull(ringAt(P, pr, 2).concat(top))), crease: poly(top) });
+  });
   let done = "", todo = "";
   for (let j = 0; j < 6; j++) {
-    const y = BY0 + 10 + j * 8.5;
-    done += open([P(BX0 + 9, y, 7), P(mid - 7, y, 7)]);
-    (j < 3 ? (s) => { done += s; } : (s) => { todo += s; })(open([P(mid + 7, y, 7), P(BX1 - 9, y, 7)]));
+    const y = BY0 + 10 + j * 8.5, seg = (x0, x1, zf) => open([P(x0, y, zf(x0)), P(x1, y, zf(x1))]);
+    done += seg(BX0 + 9, mid - 6, zl);
+    if (j < 3) done += seg(mid + 6, BX1 - 9, zr); else todo += seg(mid + 6, BX1 - 9, zr);
   }
   mk("path", { d: done, class: "nf" }, book);
   mk("path", { d: todo, class: "nf lo" }, book);
   // where the next slip will be written: one dot at the head of the first blank line
   const pen = mk("circle", { r: 2, class: "dot m" }, book);
-  place(pen, P(mid + 7, BY0 + 10 + 3 * 8.5, 7));
+  place(pen, P(mid + 6, BY0 + 10 + 3 * 8.5, zr(mid + 6)));
 
   const B = register(stage, (_dt, now) => {
     let moving = false;
@@ -121,6 +125,6 @@ hairline({
   means: "Order slips wait in a queue by the big book, the final word. Pick a slip: it is safe in line until it is written in the book.",
   rules: [1, 2, 4, 6],
   range: [0, 40, 90],
-  tour: [[150, 120], [120, 110], [260, 170], null],
+  tour: [[145, 111], [100, 88], [274, 231], null],
   mount,
 });

@@ -23,15 +23,18 @@ const kernel = readFileSync(join(src, "kernel.js"), "utf8");
 writeFileSync(join(out, "kernel.js"), `${kernel}\nexport { HL };\n`);
 writeFileSync(join(out, "kernel.d.ts"), "// eslint-disable-next-line @typescript-eslint/no-explicit-any\nexport declare const HL: any;\n");
 
-// Reading a figure's definition needs no DOM: nothing runs until mount.
-const stub = new Proxy({}, { get: () => () => undefined });
+// Reading a figure's definition needs the kernel (a figure may build its geometry when it
+// loads) but no DOM: nothing touches the page until mount.
+const kernelScript = new vm.Script(kernel);
 
 const files = readdirSync(join(src, "figures")).filter((f) => f.endsWith(".js")).sort();
 const meta = {};
 for (const file of files) {
   const code = readFileSync(join(src, "figures", file), "utf8");
   let def;
-  vm.runInNewContext(code, { HL: stub, hairline: (d) => (def = d), Math, Number, Array, Object, Map, Set, String });
+  const context = vm.createContext({ hairline: (d) => (def = d) });
+  kernelScript.runInContext(context);
+  vm.runInContext(code, context, { filename: file });
   if (!def?.name) throw new Error(`${file}: no hairline({ name }) call`);
   if (`${def.name}.js` !== file) throw new Error(`${file}: its name is "${def.name}"; the file must be named ${def.name}.js`);
   meta[def.name] = { means: def.means, range: def.range, tour: def.tour ?? null, rules: def.rules };

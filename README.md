@@ -11,15 +11,15 @@ studies (flash sales, order fulfillment, live leaderboards, video delivery, paym
 ## Run it
 
 ```bash
-npm install
-npm run dev        # http://localhost:3000
+bun install
+bun run dev        # http://localhost:3000
 ```
 
 ## Build the static site
 
 ```bash
-npm run build      # writes plain HTML, CSS and JS to ./out
-npm start          # serves ./out locally
+bun run build      # writes plain HTML, CSS and JS to ./out
+bun run start      # serves ./out locally
 ```
 
 Every page is generated at build time (`output: "export"` in `next.config.mjs`), so there is no server code at
@@ -31,7 +31,7 @@ all. On Vercel, import the repository and keep the default Next.js settings. No 
 - Every lesson figure was drawn with the **hairline-create** skill (installed with `npx skills add lucasmarkes/hairline`,
   kept in `.claude/skills/hairline-create`). Each one is a single file in `hairline/figures/`, written in the skill's
   format and checked with its validator and its browser look.
-- `scripts/figures.mjs` (run before `dev`, `build` and `typecheck`) wraps each figure file, unchanged, into an ES
+- `scripts/figures.mjs` (run by Bun before `dev`, `build` and `typecheck`) wraps each figure file, unchanged, into an ES
   module next to the skill's kernel (`hairline/kernel.js`, also unchanged), and writes a registry so each figure is
   its own small chunk that loads only when it comes near the screen.
 - `components/figures/Figure.tsx` mounts a figure the way the skill's bench page does: the stage, the read-out in
@@ -40,20 +40,21 @@ all. On Vercel, import the repository and keep the default Next.js settings. No 
 To change a figure, edit `hairline/figures/<name>.js` and check it with the skill:
 
 ```bash
-node .claude/skills/hairline-create/look.mjs hairline/figures/<name>.js --answer x,y,z
+node .claude/skills/hairline-create/look.mjs hairline/figures/<name>.js --answer x,y,z   # the skill's tools need Node
 ```
 
 ## Checks
 
 ```bash
-npm run typecheck
-npm run check:content    # no emojis, no em or en dashes, no markdown emphasis, no leftover TODOs
-npm run build && npm run check:figures
+bun run typecheck
+bun run check:content    # no emojis, no em or en dashes, no markdown emphasis, no leftover TODOs
+bun run build && bun run check:figures
 ```
 
 `check:figures` runs every figure through the hairline-create validator, then opens every page in Chromium at laptop
 and phone sizes: each figure must draw, answer a pointer on its first tour stop, return to rest when the pointer
-leaves, and no page may scroll sideways or log an error. It uses `playwright-core` and looks for Chromium at
+leaves, and no page may scroll sideways or log an error. It runs on Node, because the skill's validator loads each
+figure in a Node child process; everything else runs on Bun. It uses `playwright-core` and looks for Chromium at
 `/opt/pw-browsers/chromium-1194`; set `CHROME_PATH` to point at another Chrome or Chromium binary.
 
 ## How it is organized
