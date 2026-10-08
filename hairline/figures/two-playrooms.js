@@ -38,9 +38,10 @@ function mount({ stage, svg, read }, value) {
     const x0 = r.x0, x1 = x0 + RW;
     return { ...r, walls: [box(x0, 0, x1, WT, 1.2, 0.5, 0, WH), box(x0, 0, x0 + WT, RD, 1.2, 0.5, 0, WH), box(x1 - WT, 0, x1, RD, 1.2, 0.5, 0, WH)] };
   });
+  const kids = SPOTS.map(([x, y], i) => ({ x, y, el: flatDot(g, C, 1.6, "dot m"), t: tween(0), rank: 0, i }));
+  // the post and the door are painted after the kids: they play behind them, in the rooms
   box(HX - 2, HY - 2, HX + 2, HY + 2, 2, 0.7, 0, 15);
   const leaf = solid(g), base = rrect(0, -0.8, LEAF, 0.8, 0.7, 2), core = rrect(0.5, -0.3, LEAF - 0.5, 0.3, 0.25, 2);
-  const kids = SPOTS.map(([x, y], i) => ({ x, y, el: flatDot(g, C, 1.6, "dot m"), t: tween(0), rank: 0, i }));
   // nearest the door first
   kids.slice().sort((a, b) => Math.hypot(a.x - RW, a.y - HY) - Math.hypot(b.x - RW, b.y - HY)).forEach((k, r) => { k.rank = r; });
 

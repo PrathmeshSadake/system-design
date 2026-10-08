@@ -124,6 +124,6 @@ hairline({
   means: "Both sides share one form: a plate with shaped holes, and blocks that fit only their own hole. Point at a hole to drop its block in.",
   rules: [1, 2, 5, 10],
   range: [0, 40, 80],
-  tour: [[150, 150], [215, 175], [265, 200], null],
+  tour: [[173, 132], [229, 160], [283, 187], null],
   mount,
 });

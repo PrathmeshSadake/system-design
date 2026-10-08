@@ -117,6 +117,6 @@ hairline({
   means: "The desk is memory: small, close, quick. The shelves are disk: big, far, slow. Point at a block to fetch it to the desk.",
   rules: [1, 4, 5, 6],
   range: [300, 700, 1200],
-  tour: [[200, 160], [120, 200], [250, 200], null],
+  tour: [[252, 182], [165, 112], [148, 165], null],
   mount,
 });

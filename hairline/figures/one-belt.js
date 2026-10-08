@@ -104,6 +104,6 @@ hairline({
   means: "One belt carries pieces of three streams, mixed and taking turns. Dots on each lid say whose it is. Hover to slow the belt and follow one.",
   rules: [1, 4, 7, 10],
   range: [10, 22, 40],
-  tour: [[150, 150], [230, 190], [300, 220], null],
+  tour: [[150, 140], [200, 165], [250, 190], null],
   mount,
 });

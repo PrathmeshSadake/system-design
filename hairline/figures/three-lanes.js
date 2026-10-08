@@ -132,6 +132,6 @@ hairline({
   means: "Three streams ride their own little belts. When one loses a piece, only that lane waits for the copy. Point at a lane to drop a piece there.",
   rules: [1, 4, 6, 10],
   range: [10, 22, 40],
-  tour: [[150, 140], [200, 200], [250, 230], null],
+  tour: [[229, 161], [171, 190], null],
   mount,
 });

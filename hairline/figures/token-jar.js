@@ -122,6 +122,6 @@ hairline({
   means: "A jar holds five tokens and a tap drips one back each second. Every ask takes a token. Hover on the jar to ask faster than the drip.",
   rules: [4, 5, 7, 8],
   range: [0.5, 1, 2],
-  tour: [[200, 190], [330, 60], null],
+  tour: [[191, 196], [340, 60], null],
   mount,
 });

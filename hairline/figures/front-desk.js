@@ -129,6 +129,6 @@ hairline({
   means: "One front desk stands before many doors. Everyone comes in here first. Point at a door and the gate swings to send you through it.",
   rules: [1, 2, 5, 10],
   range: [0, 40, 80],
-  tour: [[150, 110], [230, 150], [290, 180], null],
+  tour: [[182, 102], [263, 142], [303, 163], null],
   mount,
 });
