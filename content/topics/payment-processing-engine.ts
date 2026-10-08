@@ -27,7 +27,7 @@ export const topic: Topic = {
       name: "Immutable, append-only entries",
       simple: "A notebook written in pen, never erased",
       body: [
-        "Ledger entries are written once and never changed or deleted. It is like writing in pen in a notebook with numbered pages. If the teacher makes a mistake, she does not grab an eraser. She writes a new line that cancels it, called a reversing entry, and then writes the correct line.",
+        "Ledger entries are written once and never changed or deleted. It is like writing in pen in a notebook with numbered pages. A mistake is never rubbed out with an eraser. Instead, the teacher writes a new line that cancels it, called a reversing entry, and then writes the correct line.",
         "This keeps a full history. Anyone can read the notebook from page one and see exactly what happened and when, which is what auditors, the grown-ups who check the books, need. It also makes bugs easier to find, because nothing was quietly painted over.",
         "A balance, like how much money Ana has, comes from adding up all of Ana's entries. Adding up years of entries on every request would be slow, so systems usually also keep a stored balance and update it in the same database transaction as the new entries, so the two can never disagree. The trade-off: the notebook only grows, so it needs more and more storage, and fixing a mistake takes extra entries instead of a quick edit.",
       ],
@@ -40,7 +40,7 @@ export const topic: Topic = {
       body: [
         "If the computer crashed after writing Sam minus 5 but before writing Ana plus 5, five marbles would vanish. To stop that, all entries of one transfer are saved inside a single database transaction. A transaction is an all or nothing promise: either every line is saved, or none of them are.",
         "Databases that keep this promise are called ACID. In plain words: the change happens all at once, the rules always hold, two changes at the same moment do not trip over each other, and once saved, it stays saved even if the power goes out. Ledgers usually live in a relational database, the kind built from tables, because it keeps these promises well and gives strong consistency, meaning every reader sees the latest saved truth.",
-        "Rules are checked inside the same transaction. For example, the database locks Sam's balance, checks that he has at least 5, and only then writes the entries. Because the check and the write happen together, two payments at the same moment cannot both spend the same 5 marbles.",
+        "Rules are checked inside the same transaction. For example, the database locks Sam's balance, checks that Sam has at least 5, and only then writes the entries. Because the check and the write happen together, two payments at the same moment cannot both spend the same 5 marbles.",
         "The trade-off is speed. Strong promises mean waiting for locks, and one very busy account, like a huge shop, can become a traffic jam. When teams split a ledger across several databases, they try hard to keep all entries of one transaction in the same database.",
       ],
       remember: "Write all entries of a payment in one all or nothing transaction, and check the rules inside it.",
