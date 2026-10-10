@@ -5,8 +5,12 @@ lines, toy boxes and cookie jars. Every drawing is a [Hairline](https://hairline
 isometric line drawing that answers your pointer.
 
 It covers 14 building blocks (capacity estimation, networking, storage, caching, queues, consensus, sharding,
-transactions, streaming, resiliency, observability, domain design, migrations, and cost) and 6 real world case
-studies (flash sales, order fulfillment, live leaderboards, video delivery, payment ledgers, and fraud detection).
+transactions, streaming, resiliency, observability, domain design, migrations, and cost), 6 real world case
+studies (flash sales, order fulfillment, live leaderboards, video delivery, payment ledgers, and fraud detection),
+and a low level design track: object lessons, SOLID, design patterns, and the machine coding problems interviewers
+ask you to build. Every LLD section is a kid story first, then the interview definition, when to use it, when to
+leave it, and the questions that usually follow. Where code helps, the same idea is a runnable Java file and a
+runnable JavaScript file.
 
 ## Run it
 
@@ -24,6 +28,20 @@ bun run start      # serves ./out locally
 
 Every page is generated at build time (`output: "export"` in `next.config.mjs`), so there is no server code at
 all. On Vercel, import the repository and keep the default Next.js settings. No environment variables are needed.
+
+## Low level design examples
+
+The words live in `content/topics/lld-*.ts` and are registered in `content/index.ts` after the case studies.
+Runnable samples live in `examples/lld/js` and `examples/lld/java`. `scripts/examples.mjs` (Bun, before `dev`,
+`build`, and `typecheck`) copies each pair into `content/lld-examples.json`, which the lesson page renders.
+
+```bash
+bun examples/lld/js/splitwise.js
+javac examples/lld/java/Splitwise.java -d /tmp/lld-classes && java -cp /tmp/lld-classes Splitwise
+```
+
+Each file's `main` or `demo` throws if a rule fails and prints `ok` in Java when it holds. Money is integer cents.
+Chess move generation includes check and checkmate. Castling and en passant are named follow-ups, not implemented.
 
 ## The figures
 
@@ -64,7 +82,8 @@ app/                        pages (home, one page per lesson, not found)
 components/figures/         the Figure component and the generated figure modules
 hairline/                   the skill's kernel and one file per figure
 content/topics/             the words for each lesson, as typed data
-content/index.ts            reading order
-scripts/                    figure wrapper and checkers
+content/index.ts            reading order (concepts, case studies, then LLD)
+examples/lld/               runnable Java and JavaScript for the LLD lessons
+scripts/                    figure wrapper, example bundler, and checkers
 .claude/skills/             the hairline-create skill
 ```

@@ -375,6 +375,50 @@ em {
   font-size: 15.5px;
   line-height: 1.6;
 }
+.callouts {
+  display: grid;
+  gap: 18px;
+}
+.callouts .mono-label,
+.prose > div > .mono-label {
+  margin-bottom: 8px;
+}
+.samples {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+  max-width: 100%;
+}
+.samples > div {
+  min-width: 0;
+  max-width: 100%;
+}
+.sample-label {
+  margin-bottom: 8px;
+}
+.code {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: auto;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-stone);
+  font: 12.5px/1.55 var(--font-mono);
+  color: var(--color-ink);
+  white-space: pre;
+}
+.sample-run {
+  max-width: 100%;
+  min-width: 0;
+  margin-top: 8px;
+  font: 12px/1.5 var(--font-mono);
+  color: var(--color-muted);
+  overflow-x: auto;
+  white-space: nowrap;
+}
 
 /* A figure: a white plate drawn by its shadow, the name and the read-out in its corners. */
 .figure {

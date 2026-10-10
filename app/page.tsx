@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { HeroFigure } from "@/components/HeroFigure";
-import { caseStudies, concepts } from "@/content";
+import { caseStudies, concepts, lldLessons } from "@/content";
 import type { Topic } from "@/lib/types";
 
 const at = (i: number) => ({ "--i": i }) as CSSProperties;
@@ -41,14 +41,15 @@ export default function HomePage() {
         </h1>
         <p className="hero-sub" style={at(2)}>
           How apps share the work, remember things and keep going when something breaks, told with lunch lines, toy
-          boxes and cookie jars. Every drawing answers your pointer.
+          boxes and cookie jars. Then the smaller craft: classes, patterns, and the whiteboard problems interviewers
+          ask you to build. Every drawing answers your pointer.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3" style={at(3)}>
           <Link className="btn btn-primary" href={`/topics/${first.slug}/`}>
             Start lesson one
           </Link>
-          <Link className="btn" href="#lessons">
-            See all twenty
+          <Link className="btn" href="#lld">
+            Low level design
           </Link>
         </div>
         <div className="hero-art" style={at(4)}>
@@ -74,6 +75,16 @@ export default function HomePage() {
           <p className="mono-label">{caseStudies.length} case studies</p>
         </div>
         <Rows items={caseStudies} />
+      </section>
+
+      <section id="lld" aria-labelledby="lld-h" className="mx-auto mt-20 max-w-[880px]">
+        <div className="mb-6 flex items-baseline justify-between gap-4">
+          <h2 id="lld-h" className="text-[20px] font-medium tracking-[-0.015em]">
+            Low level design
+          </h2>
+          <p className="mono-label">{lldLessons.length} object lessons</p>
+        </div>
+        <Rows items={lldLessons} />
       </section>
     </div>
   );

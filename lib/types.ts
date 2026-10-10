@@ -13,11 +13,19 @@ export type Section = {
   figure?: string;
   /** One sentence to remember. */
   remember?: string;
+  /** When this idea is the right tool. */
+  useWhen?: string[];
+  /** When to leave it alone. */
+  skipWhen?: string[];
+  /** Questions interviewers ask, and the traps beside them. */
+  questions?: string[];
+  /** Key in content/lld-examples.json: runnable Java and JavaScript for this part. */
+  example?: string;
 };
 
 export type Topic = {
   slug: string;
-  kind: "concept" | "case-study";
+  kind: "concept" | "case-study" | "lld";
   title: string;
   /** Case studies only: the kind of business, for example "E-Commerce". */
   area?: "E-Commerce" | "Streaming" | "Finance";

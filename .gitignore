@@ -8,3 +8,4 @@ next-env.d.ts
 npm-debug.log*
 .claude/worktrees/
 components/figures/generated/
+*.class

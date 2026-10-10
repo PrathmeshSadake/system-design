@@ -1,0 +1,182 @@
+import type { Topic } from "@/lib/types";
+
+export const topic: Topic = {
+  slug: "lld-storage",
+  kind: "lld",
+  title: "Files, memory, locks, and pools",
+  short: "Where bytes live, who may touch them, and how many hands may hold a tool at once.",
+  bigIdea:
+    "These problems are the small versions of storage. A file tree has directories, files, and a mode string. An in-memory database has keys, a deadline, and a transaction you can roll back. A lock manager lets one owner hold a name until a time. A versioned map refuses a write that did not see the latest version. A pool hands out a limited number of connections. A bounded buffer lets a producer wait when the box is full.",
+  sections: [
+    {
+      id: "file-system",
+      name: "File System",
+      simple: "Folders inside folders, a note inside a folder, and a rule about who may write",
+      figure: "file-drawers",
+      example: "file-system",
+      body: [
+        "The tree starts at a root directory. mkdir walks a path and creates missing directories. write creates or replaces a file under its parent. read returns the text if the file mode includes r.",
+        "Paths are slash-separated. Empty pieces from a leading slash are ignored. The demo writes /home/ada/note.txt, marks the file read-only, reads it back, then removes write from the directory and expects the next write to fail.",
+        "This is not a disk. There are no inodes or blocks. The interview wants the tree and the permission check. Say that, then offer blocks only if they ask how a real filesystem stores bytes.",
+      ],
+      useWhen: ["They ask you to model directories, files, and a few operations."],
+      skipWhen: ["They want a distributed file service. The node types are still the core. Replication is a different zoom."],
+      questions: [
+        "What is a node? A directory with children, or a file with text, plus a mode.",
+        "Pitfall: writing a file on top of a directory because you did not check the kind.",
+      ],
+      remember: "Walk the path. Directories have children. Files have text. Check the kind.",
+    },
+    {
+      id: "file-permissions",
+      name: "File System Directories/Files/Permissions",
+      simple: "A folder can be locked even if the note inside still says you may read it",
+      body: [
+        "mode is a small string. r means read, w means write. The demo uses rw and then empty. write checks the parent directory's mode for w. read checks the file's mode for r.",
+        "chmod sets the mode on whatever the path names. It does not walk permissions itself, which is the admin path. Say that a stricter model would require w on the parent to chmod too.",
+        "A file and a directory are different checks. People forget the directory and only test the file, then a locked folder still accepts new notes.",
+      ],
+      useWhen: ["They mention permissions, read-only, or 'who can create a file here'."],
+      skipWhen: ["A single user toy. You can skip modes and mention the string you would add."],
+      questions: [
+        "Which node is checked on write? The parent directory, for w. The file's own mode matters on read.",
+        "Pitfall: a mode check that treats any non-empty string as full access.",
+      ],
+      remember: "Read checks the file. Create and replace check the directory.",
+    },
+    {
+      id: "memory-db",
+      name: "In-Memory Database",
+      simple: "A notebook. You may scribble on a loose page and then either paste the page in or throw it away",
+      example: "memory-db",
+      body: [
+        "The database is a map from key to a row with a value and an optional expiresAt. get returns nothing if the deadline has arrived, and it deletes the stale row.",
+        "begin opens a transaction map. Writes go there. Reads see the transaction first, then the real map, so you can read your own write. commit copies the transaction onto the map, including deletes. rollback drops the transaction.",
+        "The demo puts a with a TTL, changes a and b inside a transaction, rolls back, expires a by moving the clock to 5, then commits a later write of c.",
+      ],
+      useWhen: ["They want get/put plus either expiry or a commit you can undo."],
+      skipWhen: ["A HashMap with no extra rules. Do not invent transactions until the prompt needs a group of writes."],
+      questions: [
+        "Where do uncommitted writes live? In the transaction map, not in the main map.",
+        "Pitfall: commit that only copies updates and forgets that a delete was stored as an empty marker.",
+      ],
+      remember: "The main map is truth. The transaction is a private overlay until commit.",
+    },
+    {
+      id: "memory-db-ttl",
+      name: "In-Memory DB TTL and Transactions",
+      simple: "A word can go stale, and a sentence you have not finished can be thrown away",
+      body: [
+        "TTL is expiresAt = now + ttl at put time. A ttl of zero means no deadline. get is the moment you notice. A background sweep is optional and must use the same comparison.",
+        "Only one transaction is open in this model. A second begin throws. That is easier to explain than nested transactions, which you can name as the thing you refused.",
+        "Rollback must not leave the overlay in place. The demo reads a as 1 and b as missing after rollback. If b were 3, the overlay leaked.",
+      ],
+      useWhen: ["Both a deadline and an all-or-nothing pair of writes are in the prompt."],
+      skipWhen: ["Only one of the two. Build that one. The other is a paragraph, not a second project."],
+      questions: [
+        "Does expiry inside a transaction delete the committed row immediately? The write goes to the overlay. Rollback would restore the committed row. Commit would delete it.",
+        "Pitfall: comparing expiresAt with a clock captured at construction, so time never moves.",
+      ],
+      remember: "Deadlines are checked on read. Transactions hide writes until commit or rollback.",
+    },
+    {
+      id: "lock-manager",
+      name: "Distributed Lock Manager",
+      simple: "A hook with one name. You may hang your coat there until the timer, and you may hang it again to reset the timer",
+      example: "lock-manager",
+      body: [
+        "tryLock(key, owner, ttl, now) succeeds if nobody holds the key, or the hold has expired, or the owner is the same and is renewing. It stores until = now + ttl. Another owner is refused while until is still in the future.",
+        "The demo locks as Ada at time 0, refuses Bo at 1, lets Ada renew at 2, refuses Bo at 6, and lets Bo take it at 7 when Ada's renewed deadline has passed.",
+        "Distributed here means the object is the manager many callers share. It is still one process. A real service would store the same row in a database with a conditional write. The rule does not change.",
+      ],
+      useWhen: ["Two callers must not hold the same name, and the hold must expire if the owner vanishes."],
+      skipWhen: ["One thread and a local mutex. Say the mutex, and describe this manager if the lock has to cross processes."],
+      questions: [
+        "Why expiry? So a crashed owner does not keep the lock forever. The cost is that a slow owner can lose it. The ttl has to be longer than the work, or the owner must renew.",
+        "Pitfall: a lock with no owner, so anyone can unlock it, including a confused retry.",
+      ],
+      remember: "One owner, a deadline, and the same owner may renew. After the deadline the next caller wins.",
+    },
+    {
+      id: "versioned-kv",
+      name: "Versioned Key-Value Store",
+      simple: "You may change the sentence only if you read the latest copy. Otherwise someone else changed it first",
+      example: "versioned-kv",
+      body: [
+        "Each key has a list of values. The version is the length. put(key, value, expected) succeeds only when expected equals the current length, then appends. A stale expected throws.",
+        "get returns the last value and the version. at(key, version) returns an older value, 1-based, so the history is visible.",
+        "The demo writes version 1, refuses another write that still expects 0, writes version 2, and reads both versions. That is optimistic concurrency without a lock.",
+      ],
+      useWhen: ["Two writers might update one key, and losing an update is bad."],
+      skipWhen: ["A single writer. A plain map is fine. Mention the version if they ask what a race would do."],
+      questions: [
+        "How is this different from a lock? The lock blocks the other writer. The version lets them try and tells the loser to reread.",
+        "Pitfall: returning success on a mismatched version and dropping the other writer's value.",
+      ],
+      remember: "Write only if you still see the version you read. Keep the old values.",
+    },
+    {
+      id: "connection-pool",
+      name: "Connection Pool",
+      simple: "One toy telephone. If someone is using it, you wait. If you wait too long, you leave",
+      example: "connection-pool",
+      body: [
+        "The pool has a max number of open connections, a stack of idle ones, and a list of waiters. acquire returns an idle connection, or opens a new one if open is under max, or parks a ticket.",
+        "release gives the connection to the oldest waiter if there is one, otherwise back to idle. dropLate removes tickets whose wait has reached the timeout.",
+        "The demo's max is 1 and the timeout is 5. The second acquire waits, release hands the same connection over, a later waiter is dropped at time 8.",
+      ],
+      useWhen: ["Creating the resource is expensive and only a few may exist."],
+      skipWhen: ["The resource is a plain object you can new up. A pool with max 1 and no wait is just a variable."],
+      questions: [
+        "What do you count? Open connections, not idle ones. Idle plus checked-out should equal open.",
+        "Pitfall: opening a new connection on release, so the max slowly grows.",
+      ],
+      remember: "Reuse idle, open until max, then wait. A timeout forgets the waiter.",
+    },
+    {
+      id: "connection-pool-limits",
+      name: "Connection Pool Limits and Timeouts",
+      simple: "You may not build a second telephone, and you may not stand in line all afternoon",
+      body: [
+        "max is the hard cap on open. The demo proves it by a null connection on the second acquire while the first is out.",
+        "timeout is measured from the ticket's now. dropLate is called on acquire and release so the list does not grow while nobody looks. A waiter removed this way does not receive a connection later.",
+        "A production pool would also expire an idle connection and bound the waiter list. Name those. The two numbers you must be able to defend are max and timeout.",
+      ],
+      useWhen: ["They ask how you stop the pool from opening a connection per request."],
+      skipWhen: ["Unlimited is acceptable in the toy. Still pick a max so a bug cannot loop open."],
+      questions: [
+        "What happens at the timeout? The waiter is dropped. The connection stays with whoever holds it.",
+        "Pitfall: comparing against the pool's birth time instead of the ticket's arrival time.",
+      ],
+      remember: "max caps opens. timeout caps how long a ticket may sit.",
+    },
+    {
+      id: "producer-consumer",
+      name: "Thread-Safe Producer-Consumer Queue",
+      simple: "A box with room for two toys. The maker waits when it is full. The taker waits when it is empty",
+      example: "producer-consumer",
+      body: [
+        "The buffer has a fixed capacity. put adds or waits. take removes or waits. The Java class is the one with threads: a synchronized array, wait when full or empty, notifyAll after a change. The main puts 1, 2, and 3 into a buffer of size 2, and the main thread takes them in order.",
+        "The JavaScript class is the same rule on promises, because one JavaScript thread does not block. put returns a promise that resolves when there is room. The demo checks that the third put does not finish until a take makes space, and the values come out 1, 2, 3.",
+        "Capacity is the whole point. An unbounded queue hides the backpressure that this problem is supposed to teach.",
+      ],
+      useWhen: ["A producer and a consumer share a fixed-size queue."],
+      skipWhen: ["One thread and a list. You do not need wait and notify. Mention them when a second thread appears."],
+      questions: [
+        "Why notifyAll? More than one waiter may exist, and the condition they need differs for putters and takers. notifyAll is the safe interview choice.",
+        "Pitfall: if instead of while around wait, so a woken thread does not recheck the full or empty condition.",
+      ],
+      remember: "Fixed capacity. Wait in a loop. Signal after every put and take. Order is preserved.",
+    },
+  ],
+  recap: [
+    "A file tree checks kind and mode. A memory database separates committed rows from a transaction and expires keys on read.",
+    "Locks have an owner and a deadline. Versioned keys reject stale writes.",
+    "Pools cap how many connections exist. Bounded buffers make a full producer wait.",
+  ],
+  words: [
+    { term: "Overlay", meaning: "The transaction map that hides uncommitted writes from the main map." },
+    { term: "Optimistic concurrency", meaning: "Write only if the version you read is still current." },
+    { term: "Backpressure", meaning: "A full buffer that makes the producer wait instead of growing without limit." },
+  ],
+};

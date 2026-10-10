@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s · Little Builders",
   },
   description:
-    "Big computer system ideas told with playgrounds, toys and snacks, and drawn as line figures that answer your pointer. Fourteen lessons and six real world stories.",
+    "System design and low level design, told with playgrounds, toys and snacks, and drawn as line figures that answer your pointer.",
 };
 
 export const viewport: Viewport = {
@@ -38,6 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
             <Link className="topbar-link" href="/#stories">
               Stories
+            </Link>
+            <Link className="topbar-link" href="/#lld">
+              LLD
             </Link>
           </nav>
         </header>

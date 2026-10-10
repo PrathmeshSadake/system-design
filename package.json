@@ -5,12 +5,13 @@
   "description": "System design concepts explained with simple, everyday stories and pictures.",
   "scripts": {
     "figures": "bun scripts/figures.mjs",
-    "predev": "bun scripts/figures.mjs",
+    "examples": "bun scripts/examples.mjs",
+    "predev": "bun scripts/figures.mjs && bun scripts/examples.mjs",
     "dev": "next dev",
-    "prebuild": "bun scripts/figures.mjs",
+    "prebuild": "bun scripts/figures.mjs && bun scripts/examples.mjs",
     "build": "next build",
     "start": "bunx serve@14 out",
-    "pretypecheck": "bun scripts/figures.mjs",
+    "pretypecheck": "bun scripts/figures.mjs && bun scripts/examples.mjs",
     "typecheck": "tsc --noEmit",
     "check:content": "bun scripts/check-content.mjs",
     "check:figures": "node scripts/check-figures.mjs"
